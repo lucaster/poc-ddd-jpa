@@ -10,6 +10,9 @@ import javax.persistence.Table;
 
 import lucaster.poc.ddd.jpa.v1.domain.ExpView;
 
+/**
+ * To be used with for read-only use-cases (e.g. reports or old versions of ExpView which derived fields formulas are different from the current requirements)
+ */
 @Entity
 @Table(name = "EXP_VIEW")
 public class AnemicJpaExpView implements ExpView {
@@ -96,7 +99,9 @@ public class AnemicJpaExpView implements ExpView {
 
 	@PrePersist
 	protected void prePersist() {
-		this.id = UUID.randomUUID();
+		if (this.id == null) {
+			this.id = UUID.randomUUID();
+		}
 	}
 
 	protected void setId(UUID id) {
