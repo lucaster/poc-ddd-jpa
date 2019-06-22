@@ -67,12 +67,14 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 		this.children.remove(child);
 	}
 
-	// Hibernate wants you to return your reference:
+	// Hibernate wants you to return your reference, otherwise:
+	// A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance
 	protected Set<DomainEntityExpViewChild> getChildren() {
 		return children;
 	}
 
-	// HIbernate wants to set your reference:
+	// HIbernate wants to set your reference, otherwise:
+	// A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance
 	protected void setChildren(Set<DomainEntityExpViewChild> children) {
 		this.children = children;
 	}
