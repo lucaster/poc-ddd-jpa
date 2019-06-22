@@ -69,7 +69,8 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 
 	/**
 	 * Hibernate wants you to return your reference, otherwise: <br />
-	 * A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance
+	 * <p><i>A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance</i></p>
+	 * The fix would be to use field annotations, but we cannot do that because we are inheriting from the Domain Entity.
 	 * @deprecated for frameworks only
 	 */
 	@Deprecated
@@ -79,7 +80,8 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 
 	/**
 	 * HIbernate wants to set your reference, otherwise: <br />
-	 * A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance
+	 * <p><i>A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance</i></p>
+	 * The fix would be to use field annotations, but we cannot do that because we are inheriting from the Domain Entity.
 	 * @deprecated for frameworks only
 	 */
 	@Deprecated
