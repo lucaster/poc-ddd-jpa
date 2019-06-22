@@ -46,7 +46,6 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 		return (this.addend1 + this.addend2) / this.addend3;
 	}
 
-	// Hibernate vuole per forza che gli passi il reference che hai:
 	@Override
 	public Set<DomainEntityExpViewChild> children() {
 		return Collections.unmodifiableSet(children);
