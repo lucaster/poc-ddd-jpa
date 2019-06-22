@@ -1,32 +1,34 @@
 package lucaster.poc.ddd.jpa.v1.persistence;
 
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lucaster.poc.ddd.jpa.v1.domain.ExpView;
+import lucaster.poc.ddd.jpa.v1.domain.ExpViewChild;
 
 /**
- * To be used with for read-only use-cases (e.g. reports or old versions of ExpView which 
- * derived fields formulas are different from the current requirements)
+ * To be used with for read-only use-cases (e.g. reports or old versions of
+ * ExpView which derived fields formulas are different from the current
+ * requirements)
  */
 @Entity
 @Table(name = "EXP_VIEW")
-public class AnemicJpaExpView implements ExpView {
-
-	private UUID id;
+public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJpaExpViewChild> {
 
 	private long addend1;
 	private long addend2;
 	private long addend3;
 	private long totalSum;
 	private double aggregatedIndex;
+	private Set<AnemicJpaExpViewChild> children;
 
-	public AnemicJpaExpView(ExpView base) {
+	public AnemicJpaExpView(ExpView<? extends ExpViewChild> base) {
 		this(base.getAddend1(), base.getAddend2(), base.getAddend3(), base.getTotalSum(), base.getAggregatedIndex());
 	}
 
@@ -36,16 +38,11 @@ public class AnemicJpaExpView implements ExpView {
 		this.addend3 = addend3;
 		this.totalSum = totalSum;
 		this.aggregatedIndex = aggregatedIndex;
+		this.children = new HashSet<>();
 	}
 
 	protected AnemicJpaExpView() {
 		this(0L, 0L, 0L, 0L, 0.0D);
-	}
-
-	@Id
-	@Column(name = "ID")
-	public UUID getId() {
-		return this.id;
 	}
 
 	@Override
@@ -78,6 +75,22 @@ public class AnemicJpaExpView implements ExpView {
 		return this.aggregatedIndex;
 	}
 
+	@Override
+	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL })
+	public Set<AnemicJpaExpViewChild> getChildren() {
+		return (this.children);
+	}
+
+	@Override
+	public void addAllChildren(Set<AnemicJpaExpViewChild> children) {
+		this.children.addAll(children);
+	}
+
+	@Override
+	public void clearChildren() {
+		this.children.clear();
+	}
+
 	protected void setAddend1(long addend1) {
 		this.addend1 = addend1;
 	}
@@ -98,14 +111,7 @@ public class AnemicJpaExpView implements ExpView {
 		this.aggregatedIndex = aggregatedIndex;
 	}
 
-	@PrePersist
-	protected void prePersist() {
-		if (this.id == null) {
-			this.id = UUID.randomUUID();
-		}
-	}
-
-	protected void setId(UUID id) {
-		this.id = id;
+	protected void setChildren(Set<AnemicJpaExpViewChild> children) {
+		this.children = (children);
 	}
 }

@@ -1,13 +1,17 @@
 package lucaster.poc.ddd.jpa.v1.persistence;
 
+import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lucaster.poc.ddd.jpa.v1.domain.DomainEntityExpView;
+import lucaster.poc.ddd.jpa.v1.domain.DomainEntityExpViewChild;
 import lucaster.poc.ddd.jpa.v1.domain.ExpViewIndependentFields;
 
 @Entity
@@ -23,7 +27,7 @@ public class JpaDomainEntityExpView extends DomainEntityExpView {
 	}
 
 	protected JpaDomainEntityExpView() {
-		this(0L, 0L, 0L);
+		super(0, 0, 0);
 	}
 
 	@Override
@@ -63,6 +67,12 @@ public class JpaDomainEntityExpView extends DomainEntityExpView {
 		return super.getAggregatedIndex();
 	}
 
+	@Override
+	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL }, targetEntity = JpaDomainEntityExpViewChild.class)
+	public Set<DomainEntityExpViewChild> getChildren() {
+		return super.getChildren();
+	}
+
 	protected void setId(UUID id) {
 	}
 
@@ -79,5 +89,5 @@ public class JpaDomainEntityExpView extends DomainEntityExpView {
 	}
 
 	protected void setAggregatedIndex(double aggregatedIndex) {
-	}
+	}	
 }
