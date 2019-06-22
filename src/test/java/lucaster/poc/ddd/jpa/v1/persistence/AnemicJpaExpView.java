@@ -42,7 +42,7 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 	}
 
 	protected AnemicJpaExpView() {
-		this(0L, 0L, 0L, 0L, 0.0D);
+		this(0, 0, 0, 0, 0);
 	}
 
 	@Override
