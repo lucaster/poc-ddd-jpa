@@ -18,6 +18,10 @@ import lucaster.poc.ddd.jpa.v1.domain.ExpViewIndependentFields;
 @Table(name = "EXP_VIEW")
 public class JpaDomainEntityExpView extends DomainEntityExpView {
 
+	/**
+	 * This type of constructor is useful when persisting a new Domain Entity
+	 * @param independentFields what's relevant about the Domain Entity instance
+	 */
 	public JpaDomainEntityExpView(ExpViewIndependentFields independentFields) {
 		super(independentFields);
 	}
