@@ -28,7 +28,7 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 	private double aggregatedIndex;
 	private Set<AnemicJpaExpViewChild> children;
 
-	public AnemicJpaExpView(ExpView<? extends ExpViewChild> base) {
+	public AnemicJpaExpView(ExpView<ExpViewChild> base) {
 		this(base.getAddend1(), base.getAddend2(), base.getAddend3(), base.getTotalSum(), base.getAggregatedIndex());
 	}
 
@@ -75,9 +75,13 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 		return this.aggregatedIndex;
 	}
 
-	@Override
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL })
 	public Set<AnemicJpaExpViewChild> getChildren() {
+		return children();
+	}
+
+	@Override
+	public Set<AnemicJpaExpViewChild> children() {
 		return (this.children);
 	}
 
@@ -89,6 +93,11 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 	@Override
 	public void clearChildren() {
 		this.children.clear();
+	}
+
+	@Override
+	public void removeChild(AnemicJpaExpViewChild child) {
+		this.children.remove(child);
 	}
 
 	protected void setAddend1(long addend1) {

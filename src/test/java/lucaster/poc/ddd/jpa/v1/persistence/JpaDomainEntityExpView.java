@@ -69,7 +69,7 @@ public class JpaDomainEntityExpView extends DomainEntityExpView {
 
 	@Override
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL }, targetEntity = JpaDomainEntityExpViewChild.class)
-	public Set<DomainEntityExpViewChild> getChildren() {
+	protected Set<DomainEntityExpViewChild> getChildren() {
 		return super.getChildren();
 	}
 
@@ -89,5 +89,5 @@ public class JpaDomainEntityExpView extends DomainEntityExpView {
 	}
 
 	protected void setAggregatedIndex(double aggregatedIndex) {
-	}	
+	}
 }

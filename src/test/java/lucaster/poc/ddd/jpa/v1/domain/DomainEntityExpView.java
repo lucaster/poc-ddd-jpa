@@ -1,5 +1,6 @@
 package lucaster.poc.ddd.jpa.v1.domain;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,9 +46,10 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 		return (this.addend1 + this.addend2) / this.addend3;
 	}
 
+	// Hibernate vuole per forza che gli passi il reference che hai:
 	@Override
-	public Set<DomainEntityExpViewChild> getChildren() {
-		return (children);
+	public Set<DomainEntityExpViewChild> children() {
+		return Collections.unmodifiableSet(children);
 	}
 
 	@Override
@@ -60,9 +62,18 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 		this.children.clear();
 	}
 
-	protected void setChildren(Set<? extends DomainEntityExpViewChild> children) {
-		@SuppressWarnings("unchecked")
-		Set<DomainEntityExpViewChild> cast = (Set<DomainEntityExpViewChild>) children;
-		this.children = cast;
+	@Override
+	public void removeChild(DomainEntityExpViewChild child) {
+		this.children.remove(child);
+	}
+
+	// Hibernate vuole per forza che gli passi il reference che hai:
+	protected Set<DomainEntityExpViewChild> getChildren() {
+		return children;
+	}
+
+	// HIbernate vuole per forza che setti il reference che ti dà lui:
+	protected void setChildren(Set<DomainEntityExpViewChild> children) {
+		this.children = children;
 	}
 }
