@@ -1,5 +1,6 @@
 package lucaster.poc.ddd.jpa.v1.persistence;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -76,13 +77,13 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 	}
 
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL })
-	public Set<AnemicJpaExpViewChild> getChildren() {
-		return children();
+	protected Set<AnemicJpaExpViewChild> getChildren() {
+		return this.children;
 	}
 
 	@Override
 	public Set<AnemicJpaExpViewChild> children() {
-		return (this.children);
+		return Collections.unmodifiableSet(this.children);
 	}
 
 	@Override
