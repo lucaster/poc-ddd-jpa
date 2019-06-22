@@ -67,12 +67,12 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 		this.children.remove(child);
 	}
 
-	// Hibernate vuole per forza che gli passi il reference che hai:
+	// Hibernate wants you to return your reference:
 	protected Set<DomainEntityExpViewChild> getChildren() {
 		return children;
 	}
 
-	// HIbernate vuole per forza che setti il reference che ti dà lui:
+	// HIbernate wants to set your reference:
 	protected void setChildren(Set<DomainEntityExpViewChild> children) {
 		this.children = children;
 	}
