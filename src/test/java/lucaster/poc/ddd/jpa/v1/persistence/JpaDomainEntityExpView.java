@@ -70,7 +70,9 @@ public class JpaDomainEntityExpView extends DomainEntityExpView {
 	@Override
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL }, targetEntity = JpaDomainEntityExpViewChild.class)
 	protected Set<DomainEntityExpViewChild> getChildren() {
-		return super.getChildren();
+		@SuppressWarnings("deprecation")
+		Set<DomainEntityExpViewChild> children = super.getChildren();
+		return children;
 	}
 
 	protected void setId(UUID id) {
