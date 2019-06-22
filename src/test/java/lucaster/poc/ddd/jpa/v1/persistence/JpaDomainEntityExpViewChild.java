@@ -8,13 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lucaster.poc.ddd.jpa.v1.domain.DomainEntityExpViewChild;
-import lucaster.poc.ddd.jpa.v1.domain.ExpViewChild;
 
 @Entity
 @Table(name = "EXP_VIEW_CHILD")
 public class JpaDomainEntityExpViewChild extends DomainEntityExpViewChild {
 
-    public JpaDomainEntityExpViewChild(ExpViewChild base) {
+    public JpaDomainEntityExpViewChild(DomainEntityExpViewChild base) {
         super(base);
     }
 
