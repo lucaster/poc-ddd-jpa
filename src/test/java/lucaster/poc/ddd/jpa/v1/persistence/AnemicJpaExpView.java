@@ -27,7 +27,7 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 	private long addend3;
 	private long totalSum;
 	private double aggregatedIndex;
-	private Set<AnemicJpaExpViewChild> children;
+	private Set<AnemicJpaExpViewChild> children = new HashSet<>();
 
 	public AnemicJpaExpView(ExpView<ExpViewChild> base) {
 		this(base.getAddend1(), base.getAddend2(), base.getAddend3(), base.getTotalSum(), base.getAggregatedIndex());
@@ -39,7 +39,6 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 		this.addend3 = addend3;
 		this.totalSum = totalSum;
 		this.aggregatedIndex = aggregatedIndex;
-		this.children = new HashSet<>();
 	}
 
 	protected AnemicJpaExpView() {
