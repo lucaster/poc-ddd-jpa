@@ -11,7 +11,8 @@ import javax.persistence.Table;
 import lucaster.poc.ddd.jpa.v1.domain.ExpView;
 
 /**
- * To be used with for read-only use-cases (e.g. reports or old versions of ExpView which derived fields formulas are different from the current requirements)
+ * To be used with for read-only use-cases (e.g. reports or old versions of ExpView which 
+ * derived fields formulas are different from the current requirements)
  */
 @Entity
 @Table(name = "EXP_VIEW")
