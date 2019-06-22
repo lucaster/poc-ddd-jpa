@@ -1,5 +1,7 @@
 package lucaster.poc.ddd.jpa;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -27,20 +29,26 @@ public class DddJpaPersistenceTest {
 				public Void apply(EntityManager em) {
 					JpaDomainEntityExpView expView = new JpaDomainEntityExpView(new DomainEntityExpView(1L, 2L, 3L));
 					em.persist(expView);
-					DddJpaPersistenceTest.this.id = expView.getId();
+					id = expView.getId();
 					return null;
 				}
 			}, 
 			new Function<EntityManager, Void>() {
 				@Override
 				public Void apply(EntityManager em) {
-					DomainEntityExpView expView = em.find(JpaDomainEntityExpView.class,DddJpaPersistenceTest.this.id);
-					Assert.assertEquals(DddJpaPersistenceTest.this.id, expView.getId());
-					AnemicJpaExpView anemicExpView = em.find(AnemicJpaExpView.class, DddJpaPersistenceTest.this.id);
-					Assert.assertEquals(DddJpaPersistenceTest.this.id, anemicExpView.getId());
+
+					DomainEntityExpView expView = em.find(JpaDomainEntityExpView.class, id);
+					Assert.assertEquals(id, expView.getId());
+
+					AnemicJpaExpView anemicExpView = em.find(AnemicJpaExpView.class, id);
+					Assert.assertEquals(id, anemicExpView.getId());
+
+					assertEquals(expView.getTotalSum(), anemicExpView.getTotalSum());
+					assertEquals(expView.getAggregatedIndex(), anemicExpView.getAggregatedIndex(), 0.001d);
+
 					return null;
 				}
-			} 
+			}
 		);
 	}
 
