@@ -4,11 +4,15 @@ public class DomainEntityExpViewChild extends DomainEntity implements ExpViewChi
 
     private String name;
 
+    public DomainEntityExpViewChild(ExpViewChild base) {
+        this(base.getName());
+	}
+
     public DomainEntityExpViewChild(String name) {
         this.name = name;
     }
 
-    @Override
+	@Override
     public String getName() {
         return name;
     }

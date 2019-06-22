@@ -27,7 +27,7 @@ public class JpaDomainEntityExpView extends DomainEntityExpView {
 	}
 
 	protected JpaDomainEntityExpView() {
-		super(0, 0, 0);
+		this(0, 0, 0);
 	}
 
 	@Override
