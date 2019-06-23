@@ -9,7 +9,7 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 	private long addend1;
 	private long addend2;
 	private long addend3;
-	private Set<DomainEntityExpViewChild> children = new HashSet<>();
+	protected Set<DomainEntityExpViewChild> children = new HashSet<>();
 
 	public DomainEntityExpView(ExpViewIndependentFields independentFields) {
 		this(independentFields.getAddend1(), independentFields.getAddend2(), independentFields.getAddend3());
@@ -64,27 +64,5 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 	@Override
 	public void removeChild(DomainEntityExpViewChild child) {
 		this.children.remove(child);
-	}
-
-	/**
-	 * Hibernate wants you to return your reference, otherwise: <br />
-	 * <p><i>A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance</i></p>
-	 * The fix would be to use field annotations, but we cannot do that because we are inheriting from the Domain Entity.
-	 * @deprecated for frameworks only
-	 */
-	@Deprecated
-	protected Set<DomainEntityExpViewChild> getChildren() {
-		return children;
-	}
-
-	/**
-	 * HIbernate wants to set your reference, otherwise: <br />
-	 * <p><i>A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance</i></p>
-	 * The fix would be to use field annotations, but we cannot do that because we are inheriting from the Domain Entity.
-	 * @deprecated for frameworks only
-	 */
-	@Deprecated
-	protected void setChildren(Set<DomainEntityExpViewChild> children) {
-		this.children = children;
 	}
 }

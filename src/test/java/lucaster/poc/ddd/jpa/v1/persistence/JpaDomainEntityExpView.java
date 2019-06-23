@@ -70,12 +70,27 @@ public class JpaDomainEntityExpView extends DomainEntityExpView {
 		return super.getAggregatedIndex();
 	}
 
-	@Override
+	/**
+	 * Hibernate wants you to return your reference, otherwise: <br />
+	 * <p><i>A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance</i></p>
+	 * The fix would be to use field annotations, but we cannot do that because we are inheriting from the Domain Entity.
+	 * @deprecated for frameworks only
+	 */
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL }, targetEntity = JpaDomainEntityExpViewChild.class)
+	@Deprecated
 	protected Set<DomainEntityExpViewChild> getChildren() {
-		@SuppressWarnings("deprecation")
-		Set<DomainEntityExpViewChild> children = super.getChildren();
 		return children;
+	}
+
+	/**
+	 * HIbernate wants to set your reference, otherwise: <br />
+	 * <p><i>A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance</i></p>
+	 * The fix would be to use field annotations, but we cannot do that because we are inheriting from the Domain Entity.
+	 * @deprecated for frameworks only
+	 */
+	@Deprecated
+	protected void setChildren(Set<DomainEntityExpViewChild> children) {
+		this.children = children;
 	}
 
 	protected void setId(UUID id) {
