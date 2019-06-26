@@ -47,12 +47,12 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 	}
 
 	@Override
-	public Set<DomainEntityExpViewChild> children() {
+	public Set<? extends DomainEntityExpViewChild> children() {
 		return Collections.unmodifiableSet(children);
 	}
 
 	@Override
-	public void addAllChildren(Set<DomainEntityExpViewChild> children) {
+	public void addAllChildren(Set<? extends DomainEntityExpViewChild> children) {
 		this.children.addAll(children);
 	}
 

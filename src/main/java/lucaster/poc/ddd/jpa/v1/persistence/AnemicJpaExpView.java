@@ -81,12 +81,12 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 	}
 
 	@Override
-	public Set<AnemicJpaExpViewChild> children() {
+	public Set<? extends AnemicJpaExpViewChild> children() {
 		return Collections.unmodifiableSet(this.children);
 	}
 
 	@Override
-	public void addAllChildren(Set<AnemicJpaExpViewChild> children) {
+	public void addAllChildren(Set<? extends AnemicJpaExpViewChild> children) {
 		this.children.addAll(children);
 	}
 
