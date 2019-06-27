@@ -1,14 +1,14 @@
 package lucaster.poc.ddd.jpa.v1.domain;
 
-public class DomainEntityExpViewChild extends DomainEntity implements ExpViewChild {
+public class DomainChild extends DomainEntity implements Child {
 
     private String name;
 
-    public DomainEntityExpViewChild(ExpViewChild base) {
+    public DomainChild(Child base) {
         this(base.getName());
 	}
 
-    public DomainEntityExpViewChild(String name) {
+    public DomainChild(String name) {
         this.name = name;
     }
 

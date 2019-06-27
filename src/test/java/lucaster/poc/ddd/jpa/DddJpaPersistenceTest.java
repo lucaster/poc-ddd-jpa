@@ -11,9 +11,9 @@ import javax.persistence.EntityManager;
 import org.junit.Assert;
 import org.junit.Test;
 
-import lucaster.poc.ddd.jpa.v1.domain.DomainEntityExpView;
-import lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaExpView;
-import lucaster.poc.ddd.jpa.v1.persistence.JpaDomainEntityExpView;
+import lucaster.poc.ddd.jpa.v1.domain.DomainParent;
+import lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaParent;
+import lucaster.poc.ddd.jpa.v1.persistence.JpaDomainParent;
 
 public class DddJpaPersistenceTest {
 
@@ -25,7 +25,7 @@ public class DddJpaPersistenceTest {
 			new Function<EntityManager, Void>() {
 				@Override
 				public Void apply(EntityManager em) {
-					JpaDomainEntityExpView expView = new JpaDomainEntityExpView(new DomainEntityExpView(1L, 2L, 3L));
+					JpaDomainParent expView = new JpaDomainParent(new DomainParent(1L, 2L, 3L));
 					em.persist(expView);
 					id = expView.getId();
 					return null;
@@ -35,10 +35,10 @@ public class DddJpaPersistenceTest {
 				@Override
 				public Void apply(EntityManager em) {
 
-					DomainEntityExpView expView = em.find(JpaDomainEntityExpView.class, id);
+					DomainParent expView = em.find(JpaDomainParent.class, id);
 					Assert.assertEquals(id, expView.getId());
 
-					AnemicJpaExpView anemicExpView = em.find(AnemicJpaExpView.class, id);
+					AnemicJpaParent anemicExpView = em.find(AnemicJpaParent.class, id);
 					Assert.assertEquals(id, anemicExpView.getId());
 
 					assertEquals(expView.getTotalSum(), anemicExpView.getTotalSum());

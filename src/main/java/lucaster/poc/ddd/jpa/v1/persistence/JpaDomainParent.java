@@ -10,26 +10,26 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lucaster.poc.ddd.jpa.v1.domain.DomainEntityExpView;
-import lucaster.poc.ddd.jpa.v1.domain.DomainEntityExpViewChild;
+import lucaster.poc.ddd.jpa.v1.domain.DomainParent;
+import lucaster.poc.ddd.jpa.v1.domain.DomainChild;
 
 @Entity
 @Table(name = "EXP_VIEW")
-public class JpaDomainEntityExpView extends DomainEntityExpView {
+public class JpaDomainParent extends DomainParent {
 
 	/**
 	 * This type of constructor is useful when persisting a new Domain Entity
 	 * @param independentFields what's relevant about the Domain Entity instance
 	 */
-	public JpaDomainEntityExpView(DomainEntityExpView independentFields) {
+	public JpaDomainParent(DomainParent independentFields) {
 		super(independentFields);
 	}
 
-	public JpaDomainEntityExpView(long addend1, long addend2, long addend3) {
+	public JpaDomainParent(long addend1, long addend2, long addend3) {
 		super(addend1, addend2, addend3);
 	}
 
-	protected JpaDomainEntityExpView() {
+	protected JpaDomainParent() {
 		this(0, 0, 0);
 	}
 
@@ -76,9 +76,9 @@ public class JpaDomainEntityExpView extends DomainEntityExpView {
 	 * The fix would be to use field annotations, but we cannot do that because we are inheriting from the Domain Entity.
 	 * @deprecated for frameworks only
 	 */
-	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL }, targetEntity = JpaDomainEntityExpViewChild.class)
+	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL }, targetEntity = JpaDomainChild.class)
 	@Deprecated
-	protected Set<DomainEntityExpViewChild> getChildren() {
+	protected Set<DomainChild> getChildren() {
 		return super.children;
 	}
 
@@ -89,7 +89,7 @@ public class JpaDomainEntityExpView extends DomainEntityExpView {
 	 * @deprecated for frameworks only
 	 */
 	@Deprecated
-	protected void setChildren(Set<DomainEntityExpViewChild> children) {
+	protected void setChildren(Set<DomainChild> children) {
 		super.children = children;
 	}
 

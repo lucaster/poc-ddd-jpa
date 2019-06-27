@@ -1,6 +1,5 @@
 package lucaster.poc.ddd.jpa.v1.domain;
 
-public interface ExpViewChild {
-
+public interface Child {
     String getName();
 }

@@ -5,10 +5,10 @@
 	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
 
 	<persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
-		<class>lucaster.poc.ddd.jpa.v1.persistence.JpaDomainEntityExpView</class>
-		<class>lucaster.poc.ddd.jpa.v1.persistence.JpaDomainEntityExpViewChild</class>
-		<class>lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaExpView</class>
-		<class>lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaExpViewChild</class>
+		<class>lucaster.poc.ddd.jpa.v1.persistence.JpaDomainParent</class>
+		<class>lucaster.poc.ddd.jpa.v1.persistence.JpaDomainChild</class>
+		<class>lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaParent</class>
+		<class>lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaChild</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver"   value="org.h2.Driver" />
 			<property name="javax.persistence.jdbc.url"      value="jdbc:h2:mem:test" />

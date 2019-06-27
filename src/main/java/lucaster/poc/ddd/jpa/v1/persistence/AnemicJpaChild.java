@@ -4,23 +4,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import lucaster.poc.ddd.jpa.v1.domain.ExpViewChild;
+import lucaster.poc.ddd.jpa.v1.domain.Child;
 
 @Entity
 @Table(name = "EXP_VIEW_CHILD")
-public class AnemicJpaExpViewChild extends AnemicJpaEntity implements ExpViewChild {
+public class AnemicJpaChild extends AnemicJpaEntity implements Child {
 
     private String name;
 
-    public AnemicJpaExpViewChild(ExpViewChild child) {
+    public AnemicJpaChild(Child child) {
         this(child.getName());
     }
 
-    public AnemicJpaExpViewChild(String name) {
+    public AnemicJpaChild(String name) {
         this.name = name;
     }
 
-    protected AnemicJpaExpViewChild() {
+    protected AnemicJpaChild() {
         this((String)null);
     }
 

@@ -4,18 +4,18 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DomainEntityExpView extends DomainEntity implements ExpView<DomainEntityExpViewChild> {
+public class DomainParent extends DomainEntity implements Parent<DomainChild> {
 
 	private long addend1;
 	private long addend2;
 	private long addend3;
-	protected Set<DomainEntityExpViewChild> children = new HashSet<>();
+	protected Set<DomainChild> children = new HashSet<>();
 
-	public DomainEntityExpView(ExpViewIndependentFields independentFields) {
+	public DomainParent(ParentIndependentFields independentFields) {
 		this(independentFields.getAddend1(), independentFields.getAddend2(), independentFields.getAddend3());
 	}
 
-	public DomainEntityExpView(long addend1, long addend2, long addend3) {
+	public DomainParent(long addend1, long addend2, long addend3) {
 		this.addend1 = addend1;
 		this.addend2 = addend2;
 		this.addend3 = addend3;
@@ -47,12 +47,12 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 	}
 
 	@Override
-	public Set<? extends DomainEntityExpViewChild> children() {
+	public Set<? extends DomainChild> children() {
 		return Collections.unmodifiableSet(children);
 	}
 
 	@Override
-	public void addAllChildren(Set<? extends DomainEntityExpViewChild> children) {
+	public void addAllChildren(Set<? extends DomainChild> children) {
 		this.children.addAll(children);
 	}
 
@@ -62,7 +62,7 @@ public class DomainEntityExpView extends DomainEntity implements ExpView<DomainE
 	}
 
 	@Override
-	public void removeChild(DomainEntityExpViewChild child) {
+	public void removeChild(DomainChild child) {
 		this.children.remove(child);
 	}
 }

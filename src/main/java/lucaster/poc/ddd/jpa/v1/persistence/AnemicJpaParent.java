@@ -10,8 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lucaster.poc.ddd.jpa.v1.domain.ExpView;
-import lucaster.poc.ddd.jpa.v1.domain.ExpViewChild;
+import lucaster.poc.ddd.jpa.v1.domain.Parent;
+import lucaster.poc.ddd.jpa.v1.domain.Child;
 
 /**
  * To be used with for read-only use-cases (e.g. reports or old versions of
@@ -20,20 +20,20 @@ import lucaster.poc.ddd.jpa.v1.domain.ExpViewChild;
  */
 @Entity
 @Table(name = "EXP_VIEW")
-public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJpaExpViewChild> {
+public class AnemicJpaParent extends AnemicJpaEntity implements Parent<AnemicJpaChild> {
 
 	private long addend1;
 	private long addend2;
 	private long addend3;
 	private long totalSum;
 	private double aggregatedIndex;
-	private Set<AnemicJpaExpViewChild> children = new HashSet<>();
+	private Set<AnemicJpaChild> children = new HashSet<>();
 
-	public AnemicJpaExpView(ExpView<ExpViewChild> base) {
+	public AnemicJpaParent(Parent<Child> base) {
 		this(base.getAddend1(), base.getAddend2(), base.getAddend3(), base.getTotalSum(), base.getAggregatedIndex());
 	}
 
-	public AnemicJpaExpView(long addend1, long addend2, long addend3, long totalSum, double aggregatedIndex) {
+	public AnemicJpaParent(long addend1, long addend2, long addend3, long totalSum, double aggregatedIndex) {
 		this.addend1 = addend1;
 		this.addend2 = addend2;
 		this.addend3 = addend3;
@@ -41,7 +41,7 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 		this.aggregatedIndex = aggregatedIndex;
 	}
 
-	protected AnemicJpaExpView() {
+	protected AnemicJpaParent() {
 		this(0, 0, 0, 0, 0);
 	}
 
@@ -76,17 +76,17 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 	}
 
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL })
-	protected Set<AnemicJpaExpViewChild> getChildren() {
+	protected Set<AnemicJpaChild> getChildren() {
 		return this.children;
 	}
 
 	@Override
-	public Set<? extends AnemicJpaExpViewChild> children() {
+	public Set<? extends AnemicJpaChild> children() {
 		return Collections.unmodifiableSet(this.children);
 	}
 
 	@Override
-	public void addAllChildren(Set<? extends AnemicJpaExpViewChild> children) {
+	public void addAllChildren(Set<? extends AnemicJpaChild> children) {
 		this.children.addAll(children);
 	}
 
@@ -96,7 +96,7 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 	}
 
 	@Override
-	public void removeChild(AnemicJpaExpViewChild child) {
+	public void removeChild(AnemicJpaChild child) {
 		this.children.remove(child);
 	}
 
@@ -120,7 +120,7 @@ public class AnemicJpaExpView extends AnemicJpaEntity implements ExpView<AnemicJ
 		this.aggregatedIndex = aggregatedIndex;
 	}
 
-	protected void setChildren(Set<AnemicJpaExpViewChild> children) {
+	protected void setChildren(Set<AnemicJpaChild> children) {
 		this.children = (children);
 	}
 }

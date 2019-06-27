@@ -7,21 +7,21 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lucaster.poc.ddd.jpa.v1.domain.DomainEntityExpViewChild;
+import lucaster.poc.ddd.jpa.v1.domain.DomainChild;
 
 @Entity
 @Table(name = "EXP_VIEW_CHILD")
-public class JpaDomainEntityExpViewChild extends DomainEntityExpViewChild {
+public class JpaDomainChild extends DomainChild {
 
-    public JpaDomainEntityExpViewChild(DomainEntityExpViewChild base) {
+    public JpaDomainChild(DomainChild base) {
         super(base);
     }
 
-    public JpaDomainEntityExpViewChild(String name) {
+    public JpaDomainChild(String name) {
         super(name);
     }
 
-    protected JpaDomainEntityExpViewChild() {
+    protected JpaDomainChild() {
         this((String)null);
     }
 
