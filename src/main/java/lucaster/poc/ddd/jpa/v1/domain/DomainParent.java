@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DomainParent extends DomainEntity implements Parent<DomainChild> {
+public class DomainParent extends DomainEntity implements Parent {
 
 	private long addend1;
 	private long addend2;
 	private long addend3;
-	protected Set<DomainChild> children = new HashSet<>();
+	protected Set<? extends Child> children = new HashSet<>();
 
 	public DomainParent(ParentIndependentFields independentFields) {
 		this(independentFields.getAddend1(), independentFields.getAddend2(), independentFields.getAddend3());
@@ -47,13 +47,15 @@ public class DomainParent extends DomainEntity implements Parent<DomainChild> {
 	}
 
 	@Override
-	public Set<? extends DomainChild> children() {
+	public Set<? extends Child> children() {
 		return Collections.unmodifiableSet(children);
 	}
 
 	@Override
-	public void addAllChildren(Set<? extends DomainChild> children) {
-		this.children.addAll(children);
+	public void addAllChildren(Set<? extends Child> children) {
+		for (Child c : children) {
+			this.children.add(new HashSet<>);
+		}
 	}
 
 	@Override
@@ -62,7 +64,7 @@ public class DomainParent extends DomainEntity implements Parent<DomainChild> {
 	}
 
 	@Override
-	public void removeChild(DomainChild child) {
+	public void removeChild(Child child) {
 		this.children.remove(child);
 	}
 }
