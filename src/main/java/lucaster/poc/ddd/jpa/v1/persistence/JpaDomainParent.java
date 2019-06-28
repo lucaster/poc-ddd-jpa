@@ -7,21 +7,24 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lucaster.poc.ddd.jpa.v1.domain.DomainChild;
 import lucaster.poc.ddd.jpa.v1.domain.DomainParent;
+import lucaster.poc.ddd.jpa.v1.domain.ParentIndependentFields;
 
 @Entity
-@Table(name = "EXP_VIEW")
+@Table(name = "PARENT")
 public class JpaDomainParent extends DomainParent {
 
 	/**
 	 * This type of constructor is useful when persisting a new Domain Entity
 	 * @param independentFields what's relevant about the Domain Entity instance
 	 */
-	public JpaDomainParent(DomainParent independentFields) {
+	public JpaDomainParent(ParentIndependentFields independentFields) {
 		super(independentFields);
 	}
 
@@ -77,6 +80,10 @@ public class JpaDomainParent extends DomainParent {
 	 * @deprecated for frameworks only
 	 */
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL }, targetEntity = JpaDomainChild.class)
+	@JoinTable(
+		name ="PARENT_CHILD",
+		joinColumns = @JoinColumn(name = "PARENT_ID"),
+		inverseJoinColumns = @JoinColumn(name = "CHILD_ID"))
 	@Deprecated
 	protected Set<DomainChild> getChildren() {
 		return this.children;

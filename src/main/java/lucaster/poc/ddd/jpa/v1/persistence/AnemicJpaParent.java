@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,7 +21,7 @@ import lucaster.poc.ddd.jpa.v1.domain.Parent;
  * requirements)
  */
 @Entity
-@Table(name = "EXP_VIEW")
+@Table(name = "PARENT")
 public class AnemicJpaParent extends AnemicJpaEntity implements Parent {
 
 	private long addend1;
@@ -76,6 +78,10 @@ public class AnemicJpaParent extends AnemicJpaEntity implements Parent {
 	}
 
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL })
+	@JoinTable(
+		name ="PARENT_CHILD",
+		joinColumns = @JoinColumn(name = "PARENT_ID"),
+		inverseJoinColumns = @JoinColumn(name = "CHILD_ID"))
 	protected Set<AnemicJpaChild> getChildren() {
 		return this.children;
 	}
@@ -86,7 +92,15 @@ public class AnemicJpaParent extends AnemicJpaEntity implements Parent {
 	}
 
 	@Override
-	public void addAllChildren(Set<Child> children) {
+	public void addChildren(Set<Child> children) {
+		for (Child child : children) {
+			AnemicJpaChild anemicJpaChild = (AnemicJpaChild) child;
+			this.children.add(anemicJpaChild);
+		}
+	}
+
+	@Override
+	public void addChildren(Child... children) {
 		for (Child child : children) {
 			AnemicJpaChild anemicJpaChild = (AnemicJpaChild) child;
 			this.children.add(anemicJpaChild);

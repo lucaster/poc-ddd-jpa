@@ -52,7 +52,15 @@ public class DomainParent extends DomainEntity implements Parent {
 	}
 
 	@Override
-	public void addAllChildren(Set<Child> children) {
+	public void addChildren(Set<Child> children) {
+		for (Child child : children) {
+			DomainChild domainChild = (DomainChild) child;
+			this.children.add(domainChild);
+		}
+	}
+
+	@Override
+	public void addChildren(Child... children) {
 		for (Child child : children) {
 			DomainChild domainChild = (DomainChild) child;
 			this.children.add(domainChild);
