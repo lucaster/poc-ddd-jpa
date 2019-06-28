@@ -10,8 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lucaster.poc.ddd.jpa.v1.domain.Parent;
 import lucaster.poc.ddd.jpa.v1.domain.Child;
+import lucaster.poc.ddd.jpa.v1.domain.Parent;
 
 /**
  * To be used with for read-only use-cases (e.g. reports or old versions of
@@ -20,7 +20,7 @@ import lucaster.poc.ddd.jpa.v1.domain.Child;
  */
 @Entity
 @Table(name = "EXP_VIEW")
-public class AnemicJpaParent extends AnemicJpaEntity implements Parent<AnemicJpaChild> {
+public class AnemicJpaParent extends AnemicJpaEntity implements Parent {
 
 	private long addend1;
 	private long addend2;
@@ -29,7 +29,7 @@ public class AnemicJpaParent extends AnemicJpaEntity implements Parent<AnemicJpa
 	private double aggregatedIndex;
 	private Set<AnemicJpaChild> children = new HashSet<>();
 
-	public AnemicJpaParent(Parent<Child> base) {
+	public AnemicJpaParent(Parent base) {
 		this(base.getAddend1(), base.getAddend2(), base.getAddend3(), base.getTotalSum(), base.getAggregatedIndex());
 	}
 
@@ -81,13 +81,16 @@ public class AnemicJpaParent extends AnemicJpaEntity implements Parent<AnemicJpa
 	}
 
 	@Override
-	public Set<? extends AnemicJpaChild> children() {
-		return Collections.unmodifiableSet(this.children);
+	public Set<Child> children() {
+		return Collections.<Child>unmodifiableSet(this.children);
 	}
 
 	@Override
-	public void addAllChildren(Set<? extends AnemicJpaChild> children) {
-		this.children.addAll(children);
+	public void addAllChildren(Set<Child> children) {
+		for (Child child : children) {
+			AnemicJpaChild anemicJpaChild = (AnemicJpaChild) child;
+			this.children.add(anemicJpaChild);
+		}
 	}
 
 	@Override
@@ -96,7 +99,7 @@ public class AnemicJpaParent extends AnemicJpaEntity implements Parent<AnemicJpa
 	}
 
 	@Override
-	public void removeChild(AnemicJpaChild child) {
+	public void removeChild(Child child) {
 		this.children.remove(child);
 	}
 

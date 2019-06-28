@@ -10,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lucaster.poc.ddd.jpa.v1.domain.DomainParent;
 import lucaster.poc.ddd.jpa.v1.domain.DomainChild;
+import lucaster.poc.ddd.jpa.v1.domain.DomainParent;
 
 @Entity
 @Table(name = "EXP_VIEW")
@@ -79,7 +79,7 @@ public class JpaDomainParent extends DomainParent {
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL }, targetEntity = JpaDomainChild.class)
 	@Deprecated
 	protected Set<DomainChild> getChildren() {
-		return super.children;
+		return this.children;
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class JpaDomainParent extends DomainParent {
 	 */
 	@Deprecated
 	protected void setChildren(Set<DomainChild> children) {
-		super.children = children;
+		this.children = children;
 	}
 
 	protected void setId(UUID id) {

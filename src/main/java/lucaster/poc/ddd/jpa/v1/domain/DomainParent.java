@@ -9,7 +9,7 @@ public class DomainParent extends DomainEntity implements Parent {
 	private long addend1;
 	private long addend2;
 	private long addend3;
-	protected Set<? extends Child> children = new HashSet<>();
+	protected Set<DomainChild> children = new HashSet<>();
 
 	public DomainParent(ParentIndependentFields independentFields) {
 		this(independentFields.getAddend1(), independentFields.getAddend2(), independentFields.getAddend3());
@@ -47,14 +47,15 @@ public class DomainParent extends DomainEntity implements Parent {
 	}
 
 	@Override
-	public Set<? extends Child> children() {
-		return Collections.unmodifiableSet(children);
+	public Set<Child> children() {
+		return Collections.<Child>unmodifiableSet(children);
 	}
 
 	@Override
-	public void addAllChildren(Set<? extends Child> children) {
-		for (Child c : children) {
-			this.children.add(new HashSet<>);
+	public void addAllChildren(Set<Child> children) {
+		for (Child child : children) {
+			DomainChild domainChild = (DomainChild) child;
+			this.children.add(domainChild);
 		}
 	}
 
