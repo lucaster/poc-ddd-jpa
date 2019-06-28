@@ -19,7 +19,7 @@ public class AssociationsTest {
 
         // Arrange
         final JpaDomainParent parent = new JpaDomainParent(1, 1, 1);
-        JpaDomainChild child = new JpaDomainChild("child");
+        final JpaDomainChild child = new JpaDomainChild("child");
         parent.addChildren(child);
 
         JpaUtils.commitInJpa(
@@ -35,8 +35,10 @@ public class AssociationsTest {
                 @Override
                 public Void apply(EntityManager em) {
                     // Act
-                    JpaDomainParent found = em.find(parent.getClass(), parent.getId());
-                    assertNotNull(found);
+                    JpaDomainParent foundParent = em.find(parent.getClass(), parent.getId());
+                    assertNotNull(foundParent);
+                    JpaDomainChild foundChild = em.find(child.getClass(), child.getId());
+                    assertNotNull(foundChild);
                     return null;
                 }            
             }

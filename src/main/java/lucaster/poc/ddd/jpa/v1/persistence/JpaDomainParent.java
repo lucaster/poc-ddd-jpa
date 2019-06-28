@@ -81,9 +81,10 @@ public class JpaDomainParent extends DomainParent {
 	 */
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL }, targetEntity = JpaDomainChild.class)
 	@JoinTable(
-		name ="PARENT_CHILD",
+		name = "PARENT_CHILD",
 		joinColumns = @JoinColumn(name = "PARENT_ID"),
-		inverseJoinColumns = @JoinColumn(name = "CHILD_ID"))
+		inverseJoinColumns = @JoinColumn(name = "CHILD_ID")
+	)
 	@Deprecated
 	protected Set<DomainChild> getChildren() {
 		return this.children;
