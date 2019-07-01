@@ -23,18 +23,18 @@ public class AssociationsTest {
         parent.addChildren(child);
 
         JpaUtils.commitInJpa(
+            // Act
             new Function<EntityManager, Void>() {
                 @Override
                 public Void apply(EntityManager em) {
-                    // Act
                     em.persist(parent);
                     return null;
                 }            
             },
+            // Assert
             new Function<EntityManager, Void>() {
                 @Override
                 public Void apply(EntityManager em) {
-                    // Act
                     JpaDomainParent foundParent = em.find(parent.getClass(), parent.getId());
                     assertNotNull(foundParent);
                     JpaDomainChild foundChild = em.find(child.getClass(), child.getId());
