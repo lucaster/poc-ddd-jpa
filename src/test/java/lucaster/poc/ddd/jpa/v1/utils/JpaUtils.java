@@ -8,7 +8,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 public final class JpaUtils {
-    
+
 	@SafeVarargs
 	public static <T> T commitInJpa(Function<EntityManager, ? extends Object>... fns) {
 
@@ -18,7 +18,7 @@ public final class JpaUtils {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
-        for (Function<EntityManager, ? extends Object> fn : fns) {
+		for (Function<EntityManager, ? extends Object> fn : fns) {
 			transaction.begin();
 			try {
 				result = fn.apply(em);

@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import lucaster.poc.ddd.jpa.v1.domain.DomainChild;
 
 @Entity
-@Table(name = "EXP_VIEW_CHILD")
+@Table(name = "CHILD")
 public class JpaDomainChild extends DomainChild {
 
     public JpaDomainChild(DomainChild base) {

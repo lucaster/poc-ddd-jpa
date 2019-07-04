@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import lucaster.poc.ddd.jpa.v1.domain.Child;
 
 @Entity
-@Table(name = "EXP_VIEW_CHILD")
+@Table(name = "CHILD")
 public class AnemicJpaChild extends AnemicJpaEntity implements Child {
 
     private String name;
