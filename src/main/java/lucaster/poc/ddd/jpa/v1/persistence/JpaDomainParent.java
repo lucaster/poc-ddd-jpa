@@ -22,6 +22,7 @@ public class JpaDomainParent extends DomainParent {
 
 	/**
 	 * This type of constructor is useful when persisting a new Domain Entity
+	 * 
 	 * @param independentFields what's relevant about the Domain Entity instance
 	 */
 	public JpaDomainParent(ParentIndependentFields independentFields) {
@@ -34,13 +35,6 @@ public class JpaDomainParent extends DomainParent {
 
 	protected JpaDomainParent() {
 		this(0, 0, 0);
-	}
-
-	@Override
-	@Id
-	@Column(name = "ID")
-	public UUID getId() {
-		return super.getId();
 	}
 
 	@Override
@@ -75,16 +69,17 @@ public class JpaDomainParent extends DomainParent {
 
 	/**
 	 * Hibernate wants you to return your reference, otherwise: <br />
-	 * <p><i>A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance</i></p>
-	 * The fix would be to use field annotations, but we cannot do that because we are inheriting from the Domain Entity.
+	 * <p>
+	 * <i>A collection with cascade="all-delete-orphan" was no longer referenced by
+	 * the owning entity instance</i>
+	 * </p>
+	 * The fix would be to use field annotations, but we cannot do that because we
+	 * are inheriting from the Domain Entity.
+	 * 
 	 * @deprecated for frameworks only
 	 */
 	@OneToMany(orphanRemoval = true, cascade = { CascadeType.ALL }, targetEntity = JpaDomainChild.class)
-	@JoinTable(
-		name = "PARENT_CHILD",
-		joinColumns = @JoinColumn(name = "PARENT_ID"),
-		inverseJoinColumns = @JoinColumn(name = "CHILD_ID")
-	)
+	@JoinTable(name = "PARENT_CHILD", joinColumns = @JoinColumn(name = "PARENT_ID"), inverseJoinColumns = @JoinColumn(name = "CHILD_ID"))
 	@Deprecated
 	protected Set<DomainChild> getChildren() {
 		return this.children;
@@ -92,16 +87,18 @@ public class JpaDomainParent extends DomainParent {
 
 	/**
 	 * HIbernate wants to set your reference, otherwise: <br />
-	 * <p><i>A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance</i></p>
-	 * The fix would be to use field annotations, but we cannot do that because we are inheriting from the Domain Entity.
+	 * <p>
+	 * <i>A collection with cascade="all-delete-orphan" was no longer referenced by
+	 * the owning entity instance</i>
+	 * </p>
+	 * The fix would be to use field annotations, but we cannot do that because we
+	 * are inheriting from the Domain Entity.
+	 * 
 	 * @deprecated for frameworks only
 	 */
 	@Deprecated
 	protected void setChildren(Set<DomainChild> children) {
 		this.children = children;
-	}
-
-	protected void setId(UUID id) {
 	}
 
 	protected void setAddend1(long addend1) {
@@ -117,5 +114,15 @@ public class JpaDomainParent extends DomainParent {
 	}
 
 	protected void setAggregatedIndex(double aggregatedIndex) {
+	}
+
+	@Override
+	@Id
+	@Column(name = "ID")
+	public UUID getId() {
+		return super.getId();
+	}
+
+	protected void setId(UUID id) {
 	}
 }

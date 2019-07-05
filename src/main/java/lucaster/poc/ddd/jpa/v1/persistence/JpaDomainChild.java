@@ -22,7 +22,16 @@ public class JpaDomainChild extends DomainChild {
     }
 
     protected JpaDomainChild() {
-        this((String)null);
+        this((String) null);
+    }
+
+    @Override
+    @Column(name = "NAME")
+    public String getName() {
+        return super.getName();
+    }
+
+    protected void setName(String name) {
     }
 
     @Override
@@ -32,15 +41,6 @@ public class JpaDomainChild extends DomainChild {
         return super.getId();
     }
 
-    @Override
-    @Column(name = "NAME")
-    public String getName() {
-        return super.getName();
-    }
-
     protected void setId(UUID id) {
-    }
-
-    protected void setName(String name) {
     }
 }
