@@ -1,6 +1,6 @@
 package lucaster.poc.ddd.jpa.v1.domain;
 
-public class DomainChild extends DomainEntity implements Child {
+public class DomainChild extends Child {
 
     private String name;
 

@@ -3,13 +3,16 @@ package lucaster.poc.ddd.jpa.v1.persistence;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import lucaster.poc.ddd.jpa.v1.domain.Child;
@@ -22,7 +25,7 @@ import lucaster.poc.ddd.jpa.v1.domain.Parent;
  */
 @Entity
 @Table(name = "PARENT")
-public class AnemicJpaParent extends AnemicJpaEntity implements Parent {
+public class AnemicJpaParent extends Parent {
 
 	private long addend1;
 	private long addend2;
@@ -140,4 +143,23 @@ public class AnemicJpaParent extends AnemicJpaEntity implements Parent {
 	protected void setChildren(Set<AnemicJpaChild> children) {
 		this.children = (children);
 	}
+
+    @Override
+    @Id
+    @Column(name = "ID")
+    public UUID getId() {
+        return super.getId();
+    }
+
+    @PrePersist
+    protected void prePersist() {
+        if (getId() == null) {
+            setId(UUID.randomUUID());
+        }
+    }
+
+    @Override
+    protected void setId(UUID id) {
+        super.setId(id);
+    }
 }

@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DomainParent extends DomainEntity implements Parent {
+public class DomainParent extends Parent {
 
 	private long addend1;
 	private long addend2;

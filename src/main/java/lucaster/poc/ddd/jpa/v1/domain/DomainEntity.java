@@ -9,4 +9,8 @@ public abstract class DomainEntity {
 	public UUID getId() {
 		return this.id;
 	}
+
+	protected void setId(UUID id) {
+		this.id = id;
+	}
 }
