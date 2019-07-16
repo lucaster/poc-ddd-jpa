@@ -1,6 +1,5 @@
 package lucaster.poc.ddd.jpa.orm_xml;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -14,7 +13,7 @@ public class OrmXmlTest {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("testOrmXml");
         
         // Act
-        EntityManager em = emf.createEntityManager();
+        emf.createEntityManager();
 
         // Assert
     }
@@ -23,7 +22,7 @@ public class OrmXmlTest {
     public void canPersistDomainEntity() {
         // Arrange
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("testOrmXml");
-        EntityManager em = emf.createEntityManager();
+        emf.createEntityManager();
         
         // Act
 
