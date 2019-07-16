@@ -23,7 +23,7 @@ public class OrmXmlTest {
     public void canPersistDomainEntity() {
         // Arrange
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("testOrmXml");
-        EntityManager em = emf.createEntityManager();g
+        EntityManager em = emf.createEntityManager();
         
         // Act
 
