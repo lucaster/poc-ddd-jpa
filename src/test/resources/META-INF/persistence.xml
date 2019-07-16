@@ -12,8 +12,7 @@
 			<property name="javax.persistence.jdbc.driver"   value="org.h2.Driver" />
 			<property name="javax.persistence.jdbc.url"      value="jdbc:h2:mem:test" />
 			<property name="javax.persistence.jdbc.user"     value="sa" />
-			<property name="javax.persistence.jdbc.password" value="" />
-			
+			<property name="javax.persistence.jdbc.password" value="" />			
 			<property name="hibernate.show_sql"              value="true"/>			
 			<property name="hibernate.dialect"               value="org.hibernate.dialect.H2Dialect" />
 			<property name="hibernate.hbm2ddl.auto"          value="create-drop" />
@@ -22,16 +21,15 @@
 
 	<persistence-unit name="testOrmXml" transaction-type="RESOURCE_LOCAL">
 		<mapping-file>META-INF/orm.xml</mapping-file>
-		<class>lucaster.poc.ddd.jpa.v1.persistence.JpaDomainParent</class>
-		<class>lucaster.poc.ddd.jpa.v1.persistence.JpaDomainChild</class>
+		<class>lucaster.poc.ddd.jpa.v1.persistence.DomainParent</class>
+		<class>lucaster.poc.ddd.jpa.v1.persistence.DomainChild</class>
 		<class>lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaParent</class>
 		<class>lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaChild</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver"   value="org.h2.Driver" />
 			<property name="javax.persistence.jdbc.url"      value="jdbc:h2:mem:test" />
 			<property name="javax.persistence.jdbc.user"     value="sa" />
-			<property name="javax.persistence.jdbc.password" value="" />
-			
+			<property name="javax.persistence.jdbc.password" value="" />			
 			<property name="hibernate.show_sql"              value="true"/>			
 			<property name="hibernate.dialect"               value="org.hibernate.dialect.H2Dialect" />
 			<property name="hibernate.hbm2ddl.auto"          value="create-drop" />
