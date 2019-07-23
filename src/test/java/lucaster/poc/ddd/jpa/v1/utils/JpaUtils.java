@@ -20,6 +20,7 @@ public final class JpaUtils {
 	}
 
 	public static <T> Function<Function<EntityManager, ? extends Object>[], T> getCommitterInJpa(final String persistenceUnitName) {
+		
 		return new Function<Function<EntityManager, ? extends Object>[], T>() {
 
 			@Override
