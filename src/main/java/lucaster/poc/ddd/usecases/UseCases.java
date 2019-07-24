@@ -48,12 +48,12 @@ abstract class Try<T> {
         return new Success<>(u);
     }
     public static <U> Try<U> failure(Throwable e) {
-        return new Fail<>(e);
+        return new Failure<>(e);
     }
 }
-final class Fail<T> extends Try<T> {
+final class Failure<T> extends Try<T> {
     public final Throwable error;
-    Fail(Throwable error) {
+    Failure(Throwable error) {
         this.error = error;
     }
 }
