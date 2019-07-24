@@ -1,19 +1,42 @@
 package lucaster.poc.ddd.usecases;
 
+import java.util.Collections;
+import java.util.Set;
+
 // https://github.com/jasongoodwin/better-java-monads/blob/master/src/main/java/com/jasongoodwin/monads/Try.java
 
-final class SearchUseCase extends UseCase<SearchRequest, SearchResponse> {
-    @Override
-    Try<SearchResponse> execute(SearchRequest input) {
-        return null;
+abstract class UseCase<REQ extends Request, RES extends Response> {
+    final public Try<RES> run(REQ request) {
+        try {
+            validate(request);
+        }
+        catch (ValidationFailedException e) {
+            return Try.failure(e);
+        }
+        try {
+            RES response = execute(request);
+            return Try.success(response);
+        }
+        catch (RuntimeException e) {
+            return Try.failure(e);
+        }
+    }
+    protected abstract void validate(REQ request) throws ValidationFailedException;
+    protected abstract RES execute(REQ request);
+}
+final class ValidationFailed {
+    public final Set<ValidationFailedDetail> details;
+    ValidationFailed(Set<ValidationFailedDetail> details) {
+        this.details = Collections.unmodifiableSet(details);
     }
 }
-final class SearchRequest extends Request {}
-final class SearchResponse extends Response {}
-
-
-abstract class UseCase<REQ extends Request, RES extends Response> {
-    abstract Try<RES> execute(REQ request);
+final class ValidationFailedDetail {}
+class ValidationFailedException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
+    public final ValidationFailed vf;
+    ValidationFailedException(ValidationFailed vf) {
+        this.vf = vf;
+    }
 }
 abstract class Request {}
 abstract class Response {}
@@ -28,20 +51,29 @@ abstract class Try<T> {
     }
 }
 final class Fail<T> extends Try<T> {
-    private final Throwable error;
+    public final Throwable error;
     Fail(Throwable error) {
         this.error = error;
     }
-    Throwable getError() {
-        return this.error;
-    }
 }
 final class Success<T> extends Try<T> {
-    private final T t;
+    public final T t;
     Success(T t) {
         this.t = t;
     }
-    T getT() {
-        return this.t;
+}
+
+
+
+class SearchUseCase extends UseCase<SearchRequest, SearchResponse> {
+    // constructor with injected dependencies
+    @Override
+    protected void validate(SearchRequest request) throws ValidationFailedException {
+    }
+    @Override
+    protected SearchResponse execute(SearchRequest request) {
+        return new SearchResponse();
     }
 }
+final class SearchRequest extends Request {}
+final class SearchResponse extends Response {}
