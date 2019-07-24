@@ -7,7 +7,7 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
     /**
      * Template method pattern
      */
-    final public Try<O> run(I request) {
+    final public Try<O> execute(I request) {
         try {
             validate(request);
         }
@@ -15,7 +15,7 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
             return Try.failure(e); // User error
         }
         try {
-            O response = execute(request);
+            O response = work(request);
             return Try.success(response);
         }
         catch (RuntimeException e) {
@@ -29,7 +29,7 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
     /**
      * Does the actual heavy work
      */
-    protected abstract O execute(I request);
+    protected abstract O work(I request);
 }
 abstract class UseCaseRequest {}
 abstract class UseCaseResponse {}
@@ -40,13 +40,13 @@ class ValidationFailedException extends RuntimeException {
         this.vf = vf;
     }
 }
-final class ValidationFailure {
+class ValidationFailure {
     public final Set<ValidationFailedDetail> details;
     public ValidationFailure(Set<ValidationFailedDetail> details) {
         this.details = Collections.unmodifiableSet(details);
     }
 }
-final class ValidationFailedDetail {}
+class ValidationFailedDetail {}
 
 
 
@@ -74,6 +74,7 @@ final class Success<T> extends Try<T> {
 }
 
 
+
 // @Transactional @Service
 class CreateProposal extends UseCase<CreateProposalRequest, CreateProposalResponse> {
     // constructor with injected dependencies
@@ -81,7 +82,7 @@ class CreateProposal extends UseCase<CreateProposalRequest, CreateProposalRespon
     protected void validate(CreateProposalRequest request) throws ValidationFailedException {
     }
     @Override
-    protected CreateProposalResponse execute(CreateProposalRequest request) {
+    protected CreateProposalResponse work(CreateProposalRequest request) {
         return new CreateProposalResponse();
     }
 }
