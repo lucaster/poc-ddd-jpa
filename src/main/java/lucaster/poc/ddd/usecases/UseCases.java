@@ -9,14 +9,14 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
             validate(request);
         }
         catch (ValidationFailedException e) {
-            return Try.failure(e);
+            return Try.failure(e); // User error
         }
         try {
             O response = execute(request);
             return Try.success(response);
         }
         catch (RuntimeException e) {
-            return Try.failure(e);
+            return Try.failure(e); // Server error
         }
     }
     protected abstract void validate(I request) throws ValidationFailedException;
@@ -24,20 +24,20 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
 }
 abstract class UseCaseRequest {}
 abstract class UseCaseResponse {}
-final class ValidationFailed {
+class ValidationFailedException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
+    public final ValidationFailure vf;
+    public ValidationFailedException(ValidationFailure vf) {
+        this.vf = vf;
+    }
+}
+final class ValidationFailure {
     public final Set<ValidationFailedDetail> details;
-    public ValidationFailed(Set<ValidationFailedDetail> details) {
+    public ValidationFailure(Set<ValidationFailedDetail> details) {
         this.details = Collections.unmodifiableSet(details);
     }
 }
 final class ValidationFailedDetail {}
-class ValidationFailedException extends RuntimeException {
-    private static final long serialVersionUID = 1L;
-    public final ValidationFailed vf;
-    public ValidationFailedException(ValidationFailed vf) {
-        this.vf = vf;
-    }
-}
 
 
 
@@ -65,7 +65,7 @@ final class Success<T> extends Try<T> {
 }
 
 
-
+// @Transactional @Service
 class CreateProposal extends UseCase<CreateProposalRequest, CreateProposalResponse> {
     // constructor with injected dependencies
     @Override
