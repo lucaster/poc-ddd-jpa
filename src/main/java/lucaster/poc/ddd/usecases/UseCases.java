@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.Set;
 
 abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
+    /**
+     * Template method pattern
+     */
     final public Try<O> run(I request) {
         try {
             validate(request);
@@ -19,7 +22,13 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
             return Try.failure(e); // Server error
         }
     }
+    /**
+     * Might validate the request data in itself, or check or current user's permissions
+     */
     protected abstract void validate(I request) throws ValidationFailedException;
+    /**
+     * Does the actual heavy work
+     */
     protected abstract O execute(I request);
 }
 abstract class UseCaseRequest {}
