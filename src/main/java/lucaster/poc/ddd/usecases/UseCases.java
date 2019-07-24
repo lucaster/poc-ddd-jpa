@@ -14,6 +14,9 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
         catch (ValidationFailedException e) {
             return Try.failure(e); // User error
         }
+        catch (RuntimeException e) {
+            return Try.failure(e); // Server error
+        }
         try {
             O response = work(request);
             return Try.success(response);
