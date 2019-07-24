@@ -5,7 +5,7 @@ import java.util.Set;
 
 // https://github.com/jasongoodwin/better-java-monads/blob/master/src/main/java/com/jasongoodwin/monads/Try.java
 
-abstract class UseCase<REQ extends Request, RES extends Response> {
+abstract class UseCase<REQ extends UseCaseRequest, RES extends UseCaseResponse> {
     final public Try<RES> run(REQ request) {
         try {
             validate(request);
@@ -38,8 +38,8 @@ class ValidationFailedException extends RuntimeException {
         this.vf = vf;
     }
 }
-abstract class Request {}
-abstract class Response {}
+abstract class UseCaseRequest {}
+abstract class UseCaseResponse {}
 
 abstract class Try<T> {
     protected Try() {}
@@ -65,15 +65,15 @@ final class Success<T> extends Try<T> {
 
 
 
-class SearchUseCase extends UseCase<SearchRequest, SearchResponse> {
+class CreateProposal extends UseCase<CreateProposalRequest, CreateProposalResponse> {
     // constructor with injected dependencies
     @Override
-    protected void validate(SearchRequest request) throws ValidationFailedException {
+    protected void validate(CreateProposalRequest request) throws ValidationFailedException {
     }
     @Override
-    protected SearchResponse execute(SearchRequest request) {
-        return new SearchResponse();
+    protected CreateProposalResponse execute(CreateProposalRequest request) {
+        return new CreateProposalResponse();
     }
 }
-final class SearchRequest extends Request {}
-final class SearchResponse extends Response {}
+final class CreateProposalRequest  extends UseCaseRequest {}
+final class CreateProposalResponse extends UseCaseResponse {}
