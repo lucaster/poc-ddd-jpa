@@ -111,14 +111,21 @@ final class Success<T> extends Try<T> {
 
 // @Transactional @Service
 class CreateProposal extends UseCase<CreateProposalRequest, CreateProposalResponse> {
-    // constructor with injected dependencies
+    public CreateProposal(/* inject dependencies here */) {
+    }
     @Override
     protected void validateComplex(CreateProposalRequest request) throws ValidationFailureException {
+        // NOOP
     }
     @Override
     protected CreateProposalResponse work(CreateProposalRequest request) {
         return new CreateProposalResponse();
     }
 }
-final class CreateProposalRequest  extends UseCaseRequest {}
+final class CreateProposalRequest  extends UseCaseRequest {
+    @Override
+    ValidationResult validate() {
+        return new ValidationSuccess(Collections.<ValidationWarning>emptySet());
+    }
+}
 final class CreateProposalResponse extends UseCaseResponse {}
