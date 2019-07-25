@@ -4,52 +4,81 @@ import java.util.Collections;
 import java.util.Set;
 
 abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
+
     /**
      * Template method pattern
      */
     final public Try<O> execute(I request) {
         try {
             validate(request);
-        }
-        catch (ValidationFailedException e) {
-            return Try.failure(e); // User error
-        }
-        catch (RuntimeException e) {
-            return Try.failure(e); // Server error
-        }
-        try {
             O response = work(request);
             return Try.success(response);
-        }
-        catch (RuntimeException e) {
+        } catch (ValidationFailureException e) {
+            return Try.failure(e); // User error
+        } catch (RuntimeException e) {
             return Try.failure(e); // Server error
         }
     }
+
+    private void validate(I request) throws ValidationFailureException {
+        validateSimple(request);
+        validateComplex(request);
+    }
+
+    private void validateSimple(I request) throws ValidationFailureException {
+        ValidationResult vr = request.validate();
+        if (vr instanceof ValidationFailure) {
+            throw new ValidationFailureException((ValidationFailure) vr);
+        }
+    }
+
     /**
      * Might validate the request data in itself, or check or current user's permissions
+     * @throws ValidationFailureException
      */
-    protected abstract void validate(I request) throws ValidationFailedException;
+    protected abstract void validateComplex(I request) throws ValidationFailureException;
+
     /**
      * Does the actual heavy work
      */
     protected abstract O work(I request);
 }
-abstract class UseCaseRequest {}
+abstract class UseCaseRequest {
+    abstract ValidationResult validate();
+}
 abstract class UseCaseResponse {}
-class ValidationFailedException extends RuntimeException {
+class ValidationFailureException extends RuntimeException {
     private static final long serialVersionUID = 1L;
     public final ValidationFailure vf;
-    public ValidationFailedException(ValidationFailure vf) {
+    public ValidationFailureException(ValidationFailure vf) {
         this.vf = vf;
     }
 }
-class ValidationFailure {
-    public final Set<ValidationFailedDetail> details;
-    public ValidationFailure(Set<ValidationFailedDetail> details) {
+
+
+
+abstract class ValidationResult {}
+final class ValidationSuccess extends ValidationResult {
+    public final Set<ValidationWarning> details;
+    public ValidationSuccess(Set<ValidationWarning> details) {
         this.details = Collections.unmodifiableSet(details);
     }
 }
-class ValidationFailedDetail {}
+final class ValidationWarning {}
+final class ValidationFailure extends ValidationResult {
+    public final Set<ValidationFailureDetail> details;
+    public ValidationFailure(Set<ValidationFailureDetail> details) {
+        this.details = Collections.unmodifiableSet(details);
+    }
+}
+final class ValidationFailureDetail {
+    public final String errorCode;
+    public final String errorMessage;
+    public ValidationFailureDetail(String errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
+}
 
 
 
@@ -82,7 +111,7 @@ final class Success<T> extends Try<T> {
 class CreateProposal extends UseCase<CreateProposalRequest, CreateProposalResponse> {
     // constructor with injected dependencies
     @Override
-    protected void validate(CreateProposalRequest request) throws ValidationFailedException {
+    protected void validateComplex(CreateProposalRequest request) throws ValidationFailureException {
     }
     @Override
     protected CreateProposalResponse work(CreateProposalRequest request) {
