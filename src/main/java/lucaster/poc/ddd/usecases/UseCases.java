@@ -33,7 +33,7 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
     }
 
     /**
-     * Might validate the request data in itself, or check or current user's permissions
+     * Validate against external data that is not present in the request itself. E.G. user permissions, ACL, etc.
      * @throws ValidationFailureException
      */
     protected abstract void validateComplex(I request) throws ValidationFailureException;
