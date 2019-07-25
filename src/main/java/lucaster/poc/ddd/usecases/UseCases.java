@@ -62,6 +62,9 @@ class ValidationFailureException extends RuntimeException {
 abstract class ValidationResult {}
 final class ValidationSuccess extends ValidationResult {
     public final Set<ValidationWarning> details;
+    public ValidationSuccess() {
+        this(Collections.<ValidationWarning>emptySet());
+    }
     public ValidationSuccess(Set<ValidationWarning> details) {
         this.details = Collections.unmodifiableSet(details);
     }
@@ -125,7 +128,7 @@ class CreateProposal extends UseCase<CreateProposalRequest, CreateProposalRespon
 final class CreateProposalRequest  extends UseCaseRequest {
     @Override
     ValidationResult validate() {
-        return new ValidationSuccess(Collections.<ValidationWarning>emptySet());
+        return new ValidationSuccess();
     }
 }
 final class CreateProposalResponse extends UseCaseResponse {}
