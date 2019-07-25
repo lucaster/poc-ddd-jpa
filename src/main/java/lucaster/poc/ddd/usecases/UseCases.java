@@ -59,27 +59,28 @@ class ValidationFailureException extends RuntimeException {
 
 
 
+// TODO static factory methods as in Try
 abstract class ValidationResult {}
 final class ValidationSuccess extends ValidationResult {
     public final Set<ValidationWarning> details;
-    public ValidationSuccess() {
+    ValidationSuccess() {
         this(Collections.<ValidationWarning>emptySet());
     }
-    public ValidationSuccess(Set<ValidationWarning> details) {
+    ValidationSuccess(Set<ValidationWarning> details) {
         this.details = Collections.unmodifiableSet(details);
     }
 }
 final class ValidationWarning {}
 final class ValidationFailure extends ValidationResult {
     public final Set<ValidationFailureDetail> details;
-    public ValidationFailure(Set<ValidationFailureDetail> details) {
+    ValidationFailure(Set<ValidationFailureDetail> details) {
         this.details = Collections.unmodifiableSet(details);
     }
 }
 final class ValidationFailureDetail {
     public final String errorCode;
     public final String errorMessage;
-    public ValidationFailureDetail(String errorCode, String errorMessage) {
+    ValidationFailureDetail(String errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }
