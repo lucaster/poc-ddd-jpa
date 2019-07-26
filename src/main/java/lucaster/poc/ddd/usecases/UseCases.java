@@ -22,6 +22,21 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
         }
     }
 
+    /**
+     * Template method pattern, Clean Architecture
+     */
+    final public void execute(I request, UseCaseResponseConsumer<O> responseConsumer) {
+        Try<O> outcome = execute(request);
+        if (outcome instanceof Success) {
+            Success<O> success = (Success<O>) outcome;
+            responseConsumer.consume(success.t);
+        }
+        else if (outcome instanceof Failure) {
+            Failure<O> failure = (Failure<O>) outcome;
+            throw new RuntimeException(failure.error);
+        }
+    }
+
     private void validate(I request) throws ValidationFailureException {
         validateSimple(request);
         validateComplex(request);
@@ -55,6 +70,9 @@ class ValidationFailureException extends RuntimeException {
     public ValidationFailureException(ValidationFailure vf) {
         this.vf = vf;
     }
+}
+interface UseCaseResponseConsumer<T extends UseCaseResponse> {
+    void consume(T response);
 }
 
 
