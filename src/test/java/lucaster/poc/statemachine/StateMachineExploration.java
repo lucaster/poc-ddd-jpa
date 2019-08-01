@@ -16,6 +16,9 @@ interface ProcessInstanceRepository {
 interface ProcessInstance {
     ProcessDefinition getProcessDefinition();
     State getActiveState();
+    /**
+     * @return an immutable set
+     */
     Set<Transition> getActiveTransitions();
     Transition findTransitionByName(String transitionName);
     boolean canActivate(Role role, Transition transition);    
@@ -29,6 +32,7 @@ interface ProcessInstance {
      * E.G. Checlkist
      */
     String getDomainEntityIdentifier();
+    boolean isTerminated();
 }
 interface State {
     // Unique within ProcessDefinition
@@ -38,6 +42,9 @@ interface Transition {
     String getName();
     State getFrom();
     State getTo();
+    /**
+     * @return an immutable set
+     */
     Set<Role> allowedActors();
 }
 interface Role {
