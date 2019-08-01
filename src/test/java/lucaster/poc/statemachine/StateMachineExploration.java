@@ -1,6 +1,5 @@
 package lucaster.poc.statemachine;
 
-import java.io.Serializable;
 import java.util.Set;
 
 interface ProcessDefinitionRepository {
@@ -12,12 +11,20 @@ interface ProcessDefinition {
     String getVersion();
 }
 interface ProcessInstanceRepository {
-    ProcessInstance findProcessInstance(Serializable domainEntityIdentifier);
+    ProcessInstance findProcessInstance(String domainEntityIdentifier);
 }
 interface ProcessInstance {
     ProcessDefinition getProcessDefinition();
     State getActiveState();
     Set<Transition> getActiveTransitions();
+    Transition findTransitionByName(String transitionName);
+    boolean canActivate(Role role, Transition transition);    
+    /**
+     * @return the arrival state
+     * @throws IllegalStateException if active state is not the transition's from state; 
+     *                               if role is not active.
+     */
+    State activate(Role role, Transition transition) throws IllegalStateException;
     /**
      * E.G. Checlkist
      */
