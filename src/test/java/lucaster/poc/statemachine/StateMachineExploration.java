@@ -11,9 +11,11 @@ abstract class ProcessDefinition {
     abstract public String getVersion();
     abstract protected ProcessInstance newProcessInstance();
 }
-abstract class ProcessInstanceRepository {
-    abstract public ProcessInstance newProcessInstance(ProcessDefinition processDefinition);
-    abstract public ProcessInstance findProcessInstance(String domainEntityIdentifier);
+interface ProcessInstanceFactory {
+    ProcessInstance newProcessInstance(ProcessDefinition processDefinition);
+}
+interface ProcessInstanceRepository {
+    ProcessInstance findProcessInstance(String domainEntityIdentifier);
 }
 abstract class ProcessInstance {
     /**
@@ -29,14 +31,15 @@ abstract class ProcessInstance {
     abstract public boolean canActivate(String roleName, String transitionName);    
     abstract public String activate(String roleName, String transitionName) throws IllegalStateException;
 
-    // If method of returned objects are protected, these can become public and respect LoD:
+    // If returned objects are immutable and do not modify anything, these methods can become public and compromise with LoD:
     abstract protected Map<Role, Set<Transition>> getAllowedActivationsTypesafe();
+    abstract protected boolean canActivate(Role role, Transition transition);    
+    abstract protected State activate(Role role, Transition transition) throws IllegalStateException;
+
     abstract protected ProcessDefinition getProcessDefinition();
     abstract protected State getActiveState();
     abstract protected Set<Transition> getActiveTransitions();
     abstract protected Transition findTransitionByName(String transitionName);
-    abstract protected boolean canActivate(Role role, Transition transition);    
-    abstract protected State activate(Role role, Transition transition) throws IllegalStateException;
 }
 abstract class State {
     // Unique within ProcessDefinition
