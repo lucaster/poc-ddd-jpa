@@ -1,52 +1,56 @@
 package lucaster.poc.statemachine;
 
+import java.util.Map;
 import java.util.Set;
 
 interface ProcessDefinitionRepository {
     ProcessDefinition findProcessDefinition(String processDefinitionName, String processDefinitionVersion);
 }
-interface ProcessDefinition {
-    ProcessInstance newProcessInstance();
-    String getName();
-    String getVersion();
+abstract class ProcessDefinition {
+    abstract public String getName();
+    abstract public String getVersion();
+    abstract protected ProcessInstance newProcessInstance();
 }
-interface ProcessInstanceRepository {
-    ProcessInstance findProcessInstance(String domainEntityIdentifier);
+abstract class ProcessInstanceRepository {
+    abstract public ProcessInstance newProcessInstance(ProcessDefinition processDefinition);
+    abstract public ProcessInstance findProcessInstance(String domainEntityIdentifier);
 }
-interface ProcessInstance {
-    ProcessDefinition getProcessDefinition();
-    State getActiveState();
-    /**
-     * @return an immutable set
-     */
-    Set<Transition> getActiveTransitions();
-    Transition findTransitionByName(String transitionName);
-    boolean canActivate(Role role, Transition transition);    
-    /**
-     * @return the arrival state
-     * @throws IllegalStateException if active state is not the transition's from state; 
-     *                               if role is not active.
-     */
-    State activate(Role role, Transition transition) throws IllegalStateException;
+abstract class ProcessInstance {
     /**
      * E.G. Checlkist
      */
-    String getDomainEntityIdentifier();
-    boolean isTerminated();
+    abstract public String getDomainEntityIdentifier();
+    abstract public boolean isTerminated();
+
+    /**
+     * @return role -> transitionNames
+     */
+    abstract public Map<String, Set<String>> getAllowedActivationsStringlyTyped();
+    abstract public boolean canActivate(String roleName, String transitionName);    
+    abstract public String activate(String roleName, String transitionName) throws IllegalStateException;
+
+    // If method of returned objects are protected, these can become public and respect LoD:
+    abstract protected Map<Role, Set<Transition>> getAllowedActivationsTypesafe();
+    abstract protected ProcessDefinition getProcessDefinition();
+    abstract protected State getActiveState();
+    abstract protected Set<Transition> getActiveTransitions();
+    abstract protected Transition findTransitionByName(String transitionName);
+    abstract protected boolean canActivate(Role role, Transition transition);    
+    abstract protected State activate(Role role, Transition transition) throws IllegalStateException;
 }
-interface State {
+abstract class State {
     // Unique within ProcessDefinition
-    String getName();
+    abstract String getName();
 }
-interface Transition {
-    String getName();
-    State getFrom();
-    State getTo();
+abstract class Transition {
+    abstract String getName();
+    abstract State getFrom();
+    abstract State getTo();
     /**
      * @return an immutable set
      */
-    Set<Role> allowedActors();
+    abstract Set<Role> allowedActors();
 }
-interface Role {
-    String getName();
+abstract class Role {
+    abstract String getName();
 }
