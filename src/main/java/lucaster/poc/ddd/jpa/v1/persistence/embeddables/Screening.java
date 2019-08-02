@@ -2,6 +2,7 @@ package lucaster.poc.ddd.jpa.v1.persistence.embeddables;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
@@ -17,6 +18,7 @@ public class Screening extends AnemicWeakJpaEntity {
 
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @MapsId
+    @JoinColumn(name = "id")
     public Checklist getChecklist() {
         return checklist;
     }
