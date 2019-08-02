@@ -14,6 +14,12 @@ public class Overview extends AnemicWeakJpaEntity {
 
     private Checklist checklist;
 
+    public Overview(Checklist checklist) {
+        this.checklist = checklist;
+    }
+
+    protected Overview() { }
+
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id")

@@ -24,9 +24,20 @@ public class Checklist extends AnemicJpaEntity {
         return overview;
     }
 
+    public void addOverview() {
+        if (this.overview == null) {
+            overview(new Overview(this));
+        }
+    }
+
     @Transient
     public OverviewSummary getOverviewSummary() {
-        return new OverviewSummary(screening.getScreeningField1(), screening.getScreeningField2());
+        if (screening != null) {
+            return new OverviewSummary(screening.getScreeningField1(), screening.getScreeningField2());
+        }
+        else {
+            return null;
+        }
     }
 
     public void setScreening(Screening screening) {
@@ -34,7 +45,12 @@ public class Checklist extends AnemicJpaEntity {
         screening.setChecklist(this);
     }
 
-    public void setOverview(Overview overview) {
+    @Deprecated
+    protected void setOverview(Overview overview) {
+        overview(overview);
+    }
+
+    private void overview(Overview overview) {
         this.overview = overview;
         overview.setChecklist(this);
     }
