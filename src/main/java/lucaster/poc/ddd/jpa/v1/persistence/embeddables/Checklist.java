@@ -10,7 +10,6 @@ import lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaEntity;
 @Entity
 public class Checklist extends AnemicJpaEntity {
 
-
     private Screening screening;
     private Overview overview;
 
