@@ -31,9 +31,11 @@ public class Checklist extends AnemicJpaEntity {
 
     public void setScreening(Screening screening) {
         this.screening = screening;
+        screening.setChecklist(this);
     }
 
     public void setOverview(Overview overview) {
         this.overview = overview;
+        overview.setChecklist(this);
     }
 }

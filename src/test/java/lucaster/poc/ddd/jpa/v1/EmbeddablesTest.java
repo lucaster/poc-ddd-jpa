@@ -45,12 +45,10 @@ public class EmbeddablesTest {
                     Screening sc = new Screening();
                     sc.setScreeningField1(1);
                     sc.setScreeningField2(2);
-                    sc.setChecklist(cl);
                     cl.setScreening(sc);
 
                     // Senza questo, non c'è nemmeno la Overview in primis
                     Overview ov = new Overview();
-                    ov.setChecklist(cl);
                     cl.setOverview(ov);
 
                     em.persist(cl);

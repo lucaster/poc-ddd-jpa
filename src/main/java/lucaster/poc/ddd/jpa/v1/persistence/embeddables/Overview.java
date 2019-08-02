@@ -21,7 +21,7 @@ public class Overview extends AnemicWeakJpaEntity {
         return checklist;
     }
 
-    public void setChecklist(Checklist checklist) {
+    protected void setChecklist(Checklist checklist) {
         this.checklist = checklist;
     }
 
