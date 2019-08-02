@@ -37,7 +37,7 @@ public class OverviewSummary {
 
     @Column
     public Integer getScreeningDerivedField() {
-        return coalesce(getScreeningDerivedField()) + coalesce(getScreeningDerivedField());
+        return coalesce(getScreeningField1()) + coalesce(getScreeningField2());
     }
 
     protected void setScreeningField1(Integer screeningField1) { }
