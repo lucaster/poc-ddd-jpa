@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.math.BigInteger;
 import java.util.UUID;
 import java.util.function.Function;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import org.junit.Test;
 
@@ -67,9 +67,18 @@ public class EmbeddablesTest {
                 @Override
                 public Void apply(EntityManager em) {
 
-                    String sqlString = "select SCREENINGDERIVEDFIELD from OVERVIEW where id = :id";
-                    Query nativeQuery = em.createNativeQuery(sqlString).setParameter("id", clId);
-                    Integer screeningDerivedField = (Integer) nativeQuery.getSingleResult();
+                    
+                    BigInteger overviewCount = (BigInteger) em
+                                                .createNativeQuery("select count(*) from OVERVIEW where id = :id")
+                                                .setParameter("id", clId)
+                                                .getSingleResult();
+                    
+                    assertEquals(BigInteger.ONE, overviewCount);
+
+                    Integer screeningDerivedField = (Integer) em
+                                                    .createNativeQuery("select SCREENINGDERIVEDFIELD from OVERVIEW where id = :id")
+                                                    .setParameter("id", clId)
+                                                    .getSingleResult();
 
                     assertEquals((Integer) 3, screeningDerivedField);
 
@@ -110,9 +119,17 @@ public class EmbeddablesTest {
                 @Override
                 public Void apply(EntityManager em) {
 
-                    String sqlString = "select SCREENINGDERIVEDFIELD from OVERVIEW where id = :id";
-                    Query nativeQuery = em.createNativeQuery(sqlString).setParameter("id", clId);
-                    Integer screeningDerivedField = (Integer) nativeQuery.getSingleResult();
+                    BigInteger overviewCount = (BigInteger) em
+                                                .createNativeQuery("select count(*) from OVERVIEW where id = :id")
+                                                .setParameter("id", clId)
+                                                .getSingleResult();
+                    
+                    assertEquals(BigInteger.ONE, overviewCount);
+
+                    Integer screeningDerivedField = (Integer) em
+                                                    .createNativeQuery("select SCREENINGDERIVEDFIELD from OVERVIEW where id = :id")
+                                                    .setParameter("id", clId)
+                                                    .getSingleResult();
 
                     assertNull(screeningDerivedField);
 
