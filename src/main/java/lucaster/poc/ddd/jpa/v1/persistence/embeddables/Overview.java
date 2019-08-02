@@ -27,8 +27,7 @@ public class Overview extends AnemicWeakJpaEntity {
 
     @Embedded
     public OverviewSummary getOverviewSummary() {
-        Screening screening = checklist.getScreening();
-        return new OverviewSummary(screening);
+       return checklist.getOverviewSummary();
     }
 
     protected void setOverviewSummary(OverviewSummary overviewSummary) { }

@@ -4,6 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaEntity;
 
@@ -21,6 +22,11 @@ public class Checklist extends AnemicJpaEntity {
     @OneToOne(mappedBy = "checklist", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public Overview getOverview() {
         return overview;
+    }
+
+    @Transient
+    public OverviewSummary getOverviewSummary() {
+        return new OverviewSummary(screening.getScreeningField1(), screening.getScreeningField2());
     }
 
     public void setScreening(Screening screening) {
