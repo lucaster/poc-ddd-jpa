@@ -11,7 +11,24 @@
 		<class>lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaChild</class>		
 		<properties>
 			<property name="javax.persistence.jdbc.driver"   value="org.h2.Driver" />
-			<property name="javax.persistence.jdbc.url"      value="jdbc:h2:mem:test" />
+			<property name="javax.persistence.jdbc.url"      value="jdbc:h2:file:C:/H2/test" />
+			<property name="javax.persistence.jdbc.user"     value="sa" />
+			<property name="javax.persistence.jdbc.password" value="" />
+			
+			<property name="hibernate.show_sql"              value="true"/>			
+			<property name="hibernate.dialect"               value="org.hibernate.dialect.H2Dialect" />
+			<property name="hibernate.hbm2ddl.auto"          value="create-drop" />
+		</properties>
+	</persistence-unit>
+
+	<persistence-unit name="embeddables" transaction-type="RESOURCE_LOCAL">		
+		<class>lucaster.poc.ddd.jpa.v1.persistence.embeddables.Checklist</class>
+		<class>lucaster.poc.ddd.jpa.v1.persistence.embeddables.Screening</class>
+		<class>lucaster.poc.ddd.jpa.v1.persistence.embeddables.Overview</class>
+		<class>lucaster.poc.ddd.jpa.v1.persistence.embeddables.OverviewSummary</class>
+		<properties>
+			<property name="javax.persistence.jdbc.driver"   value="org.h2.Driver" />
+			<property name="javax.persistence.jdbc.url"      value="jdbc:h2:file:C:/H2/embeddables" />
 			<property name="javax.persistence.jdbc.user"     value="sa" />
 			<property name="javax.persistence.jdbc.password" value="" />
 			

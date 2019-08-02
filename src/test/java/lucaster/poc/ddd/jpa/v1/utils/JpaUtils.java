@@ -10,11 +10,11 @@ import javax.persistence.Persistence;
 public final class JpaUtils {
 
 	@SafeVarargs
-	public static <T> T commitInJpa(Function<EntityManager, ? extends Object>... fns) {
+	public static <T> T commitInJpa(String persistenceUnitName, Function<EntityManager, ? extends Object>... fns) {
 
 		Object result = null;
 
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("test");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnitName);
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 
@@ -32,5 +32,10 @@ public final class JpaUtils {
 		@SuppressWarnings("unchecked")
 		T tResult = (T) result;
 		return tResult;
+	}
+
+	@SafeVarargs
+	public static <T> T commitInJpa(Function<EntityManager, ? extends Object>... fns) {
+		return commitInJpa("test", fns);
 	}
 }
