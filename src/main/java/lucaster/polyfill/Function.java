@@ -5,7 +5,7 @@ package lucaster.polyfill;
  * @param <T>
  * @param <R>
  */
-public interface Function<T, R> extends java.util.function.Function<T, R> {
+public interface Function<T, R> {
 
     /**
      * Applies this function to the given argument.
