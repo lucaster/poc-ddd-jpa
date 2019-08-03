@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNull;
 
 import java.math.BigInteger;
 import java.util.UUID;
-import java.util.function.Function;
 
 import javax.persistence.EntityManager;
 
@@ -14,6 +13,7 @@ import org.junit.Test;
 import lucaster.poc.ddd.jpa.v1.persistence.embeddables.Checklist;
 import lucaster.poc.ddd.jpa.v1.persistence.embeddables.Screening;
 import lucaster.poc.ddd.jpa.v1.utils.JpaUtils;
+import lucaster.polyfill.Function;
 
 public class EmbeddablesTest {
 
