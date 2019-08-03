@@ -177,9 +177,12 @@ public class EmbeddablesTest {
                 @Override
                 public Void apply(EntityManager em) {
 
-                    // Also loads weak entities because of https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
-                    // That's because bidirectional @OneToOne loads children entity eagerly when loading the parent anyway.
-                    // This has the (positive) side effect that derived fields of children get updated automatically.
+                    /* 
+                     * See https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
+                     * find(parent) also loads parent's weak entities. 
+                     * This is because bidirectional @OneToOne loads children entity eagerly when loading the parent anyway.
+                     * This has the (positive) side effect that derived fields of children get updated automatically.
+                     */
                     Checklist theCl = em.find(Checklist.class, clId); 
                     Screening theSc = theCl.getScreening();
                     theSc.setScreeningField1(2);
