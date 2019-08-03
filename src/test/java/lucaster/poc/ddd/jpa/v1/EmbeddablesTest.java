@@ -179,6 +179,7 @@ public class EmbeddablesTest {
 
                     /* 
                      * See https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
+                     * See https://developer.jboss.org/wiki/SomeExplanationsOnLazyLoadingone-to-one
                      * find(parent) also loads parent's weak entities. 
                      * This is because bidirectional @OneToOne loads children entity eagerly when loading the parent anyway.
                      * This has the (positive) side effect that derived fields of children get updated automatically.
