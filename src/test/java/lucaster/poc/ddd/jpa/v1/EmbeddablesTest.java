@@ -1,7 +1,6 @@
 package lucaster.poc.ddd.jpa.v1;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.math.BigInteger;
@@ -18,7 +17,9 @@ import lucaster.poc.ddd.jpa.v1.utils.JpaUtils;
 
 public class EmbeddablesTest {
 
-    @Test
+    private UUID clId;
+
+    // @BeforeClass
     public void mappingIsCorrect() {
         JpaUtils.commitInJpa("embeddables", new Function<EntityManager, Void>() {
 
@@ -29,9 +30,7 @@ public class EmbeddablesTest {
         });
     }
 
-    private UUID clId;
-
-    @Test
+    //@Test
     public void overviewSummaryUpdateUponSourceDataChange() {
 
         JpaUtils.commitInJpa(
@@ -56,7 +55,8 @@ public class EmbeddablesTest {
 
                     clId = cl.getId();
 
-                    assertNotNull(cl.getId());
+                    em.detach(sc);
+                    em.detach(cl);
 
                     return null;
                 }
@@ -88,7 +88,7 @@ public class EmbeddablesTest {
         );
     }
 
-    @Test
+    //@Test
     public void noScreeningNoOverviewSummary() {
 
         JpaUtils.commitInJpa(
@@ -108,8 +108,6 @@ public class EmbeddablesTest {
                     em.flush();
 
                     clId = cl.getId();
-
-                    assertNotNull(cl.getId());
 
                     return null;
                 }
@@ -132,6 +130,76 @@ public class EmbeddablesTest {
                                                     .getSingleResult();
 
                     assertNull(screeningDerivedField);
+
+                    return null;
+                }
+            }
+        );
+    }
+
+    @Test
+    public void updatingSourceFieldsTheSecondTime() {
+
+        System.out.println("updatingSourceFieldsTheSecondTime");
+
+        JpaUtils.commitInJpa(
+            "embeddables", 
+            new Function<EntityManager, Void>() {
+
+                @Override
+                public Void apply(EntityManager em) {
+
+                    Checklist cl = new Checklist();
+                    Screening sc = new Screening();
+                    sc.setScreeningField1(1);
+                    sc.setScreeningField2(2);
+                    cl.setScreening(sc);
+
+                    // Add Overview also adds OverviewSummary
+                    cl.addOverview();
+
+                    em.persist(cl);
+                    em.flush();
+
+                    clId = cl.getId();
+
+                    em.detach(cl.getOverview());
+                    em.detach(cl.getScreening());
+                    em.detach(cl);
+
+                    return null;
+                }
+            }, 
+            new Function<EntityManager, Void>() {
+
+                @Override
+                public Void apply(EntityManager em) {
+
+                    Checklist theCl = em.find(Checklist.class, clId); // also loads weak entities because of https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
+                    Screening theSc = theCl.getScreening();
+                    theSc.setScreeningField1(2);
+                    theSc.setScreeningField2(4);
+
+                    theCl = em.merge(theCl);
+                    em.flush();
+
+                    em.detach(theCl.getScreening());
+                    em.detach(theCl);
+
+                    return null;
+                }
+            }, 
+            new Function<EntityManager, Void>() {
+
+                @Override
+                public Void apply(EntityManager em) {
+
+                    Integer screeningDerivedField = (Integer) em
+                                                    .createNativeQuery("select SCREENINGDERIVEDFIELD from OVERVIEW where id = :id")
+                                                    .setParameter("id", clId)
+                                                    .getSingleResult();
+
+                    assertEquals((Integer) 6, screeningDerivedField);
 
                     return null;
                 }
