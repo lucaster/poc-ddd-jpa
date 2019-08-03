@@ -20,7 +20,7 @@ public class Overview extends AnemicWeakJpaEntity {
 
     protected Overview() { }
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id")
     public Checklist getChecklist() {

@@ -16,7 +16,7 @@ public class Screening extends AnemicWeakJpaEntity {
 
     private Checklist checklist;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id")
     public Checklist getChecklist() {
