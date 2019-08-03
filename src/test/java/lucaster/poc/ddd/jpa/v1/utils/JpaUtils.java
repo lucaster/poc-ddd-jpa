@@ -1,6 +1,6 @@
 package lucaster.poc.ddd.jpa.v1.utils;
 
-import java.util.function.Function;
+import lucaster.polyfill.Function;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
