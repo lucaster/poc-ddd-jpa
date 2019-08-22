@@ -3,7 +3,6 @@ package lucaster.poc.ddd.jpa.v1;
 import static org.junit.Assert.assertEquals;
 
 import java.util.UUID;
-import java.util.function.Function;
 
 import javax.persistence.EntityManager;
 
@@ -13,6 +12,7 @@ import lucaster.poc.ddd.jpa.v1.domain.DomainParent;
 import lucaster.poc.ddd.jpa.v1.persistence.AnemicJpaParent;
 import lucaster.poc.ddd.jpa.v1.persistence.JpaDomainParent;
 import lucaster.poc.ddd.jpa.v1.utils.JpaUtils;
+import lucaster.polyfill.Function;
 
 public class DerivedFieldPersistenceTest {
 

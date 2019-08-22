@@ -2,8 +2,6 @@ package lucaster.poc.ddd.jpa.v1;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.function.Function;
-
 import javax.persistence.EntityManager;
 
 import org.junit.Test;
@@ -11,6 +9,7 @@ import org.junit.Test;
 import lucaster.poc.ddd.jpa.v1.persistence.JpaDomainChild;
 import lucaster.poc.ddd.jpa.v1.persistence.JpaDomainParent;
 import lucaster.poc.ddd.jpa.v1.utils.JpaUtils;
+import lucaster.polyfill.Function;
 
 public class AssociationsTest {
 
