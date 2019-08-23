@@ -99,6 +99,18 @@ abstract class EnumStateMachineUsherProcessTopologyQuery implements UsherProcess
     public Task findTask(ProcessDefinition pd, String taskName) {
         return pd.findTaskByName(taskName);
     }
+    @Override
+    public Iterable<Role> findTaskRoles(Task task) {
+        return task.getRoles();
+    }
+    @Override
+    public ProcessDefinition findProcessDefinition(ProcessInstance pi) {
+        return pi.getProcessDefinition();
+    }
+    @Override
+    public Iterable<Task> getActiveTasks(ProcessInstance pi) {
+        return pi.getActiveTasks();
+    }
 }
 
 interface Role {}
@@ -108,25 +120,34 @@ interface ProcessDefinition {
 }
 interface Task {
     String getTaskName();
+    Iterable<Role> getRoles();
 }
-interface ProcessInstance {}
+interface ProcessInstance {
+    ProcessDefinition getProcessDefinition();
+    Iterable<Task> getActiveTasks();
+}
 
 enum ProcessDefinitions implements ProcessDefinition {
-    EXAMPLE_SM_PROCESS {
+
+    EXAMPLE_SM_PROCESS(Utils.<Task>toSet(ExampleSmProcessTasks.TASK1, ExampleSmProcessTasks.TASK2)) {
         @Override
         public String getProcessId() {
             return "EXAMPLE_SM_PROCESS";
         }
-        @Override
-        protected Iterable<Task> getTasks() {
-            Set<Task> tasks = new HashSet<>(); // TODO make this a field populated in ctor
-            tasks.add(ExampleSmProcessTasks.TASK1);
-            tasks.add(ExampleSmProcessTasks.TASK2);
-            return tasks;
-        }
     };
+
+    protected final Iterable<Task> tasks;
+
+    ProcessDefinitions(Iterable<Task> tasks) {
+        this.tasks = tasks;
+    }
+
     public abstract String getProcessId();
-    protected abstract Iterable<Task> getTasks();
+
+    protected Iterable<Task> getTasks() {
+        return tasks;
+    }
+
     public Task findTaskByName(String taskName) {
         for (Task t : getTasks()) {
             if (t.getTaskName().equals(taskName)) {
@@ -136,17 +157,43 @@ enum ProcessDefinitions implements ProcessDefinition {
         return null;
     }
 }
+
 enum ExampleSmProcessTasks implements Task {
-    TASK1 {
+    TASK1(Utils.<Role>toSet(ExampleSmProcessRoles.ROLE1)) {
         @Override
         public String getTaskName() {
             return "TASK1";
         }
     }, 
-    TASK2 {
+    TASK2(Utils.<Role>toSet(ExampleSmProcessRoles.ROLE2)) {
         @Override
         public String getTaskName() {
             return "TASK1";
         }
     };
+    protected Iterable<Role> roles;
+    ExampleSmProcessTasks(Iterable<Role> roles) {
+        this.roles = roles;
+    }
+    @Override
+    public Iterable<Role> getRoles() {
+        return roles;
+    }
+}
+
+enum ExampleSmProcessRoles implements Role {
+    ROLE1,
+    ROLE2;
+}
+
+abstract class Utils {
+    private Utils() {}
+    @SafeVarargs
+    public static <T> Set<T> toSet(T... args) {
+        Set<T> set = new HashSet<>();
+        for (T t : args) {
+            set.add(t);
+        }
+        return set;
+    }
 }
