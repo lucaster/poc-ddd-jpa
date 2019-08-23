@@ -12,7 +12,9 @@ interface Usher {
 }
 
 abstract class AbstractUsher implements Usher {
+
     private Query query;
+
     public boolean canExecute(String username, String processId, String taskName, String appInstanceId) {
         return 
             hasRoleForTask(username, processId, taskName) 
@@ -46,19 +48,17 @@ abstract class AbstractUsher implements Usher {
      */
     abstract boolean isTheActivePersonForTaskOfInstance(String username, String taskName, String appInstanceId);
 
-    boolean anyEquals(Iterable<Role> roles1, Iterable<Role> roles2) {
-        for (Role role1 : roles1) {
-            for (Role role2 : roles2) {
-                if (role1.equals(role2)) {
-                    return true;
-                }
-            }
+    static <T> boolean anyEquals(Iterable<T> roles1, Iterable<T> roles2) {
+        for (T role1 : roles1) {
+            if (anyEquals(role1, roles2)){
+                return true;
+            } 
         }
         return false;
     }
 
-    boolean anyEquals(Task task, Iterable<Task> activeTasks) {
-        for (Task activeTask : activeTasks) {
+    static <T> boolean anyEquals(T task, Iterable<T> activeTasks) {
+        for (T activeTask : activeTasks) {
             if (activeTask.equals(task)) {
                 return true;
             }
