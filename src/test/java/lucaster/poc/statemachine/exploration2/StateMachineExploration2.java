@@ -90,7 +90,7 @@ interface UsherProcessQuery extends UsherProcessTopologyQuery {
     ProcessInstance findProcessInstance(String appInstanceId);
 }
 
-abstract class EnumStateMachineUsherProcessTopologyQuery implements UsherProcessTopologyQuery {
+class ModelDrivenUsherProcessTopologyQuery implements UsherProcessTopologyQuery {
     @Override
     public ProcessDefinition findProcessDefinition(String processId) {
         return ProcessDefinitions.valueOf(processId);
@@ -157,7 +157,6 @@ enum ProcessDefinitions implements ProcessDefinition {
         return null;
     }
 }
-
 enum ExampleSmProcessTasks implements Task {
     TASK1(Utils.<Role>toSet(ExampleSmProcessRoles.ROLE1)) {
         @Override
@@ -180,7 +179,6 @@ enum ExampleSmProcessTasks implements Task {
         return roles;
     }
 }
-
 enum ExampleSmProcessRoles implements Role {
     ROLE1,
     ROLE2;
