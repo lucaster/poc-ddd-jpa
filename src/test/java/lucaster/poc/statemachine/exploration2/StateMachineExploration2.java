@@ -35,7 +35,7 @@ abstract class AbstractUsher implements Usher {
         ProcessDefinition pd = procQuery.findProcessDefinition(processId);
         Task task = procQuery.findTask(pd, taskName);
         Iterable<Role> taskRoles = procQuery.findTaskRoles(task);
-        return anyEquals(userRoles, taskRoles);
+        return Utils.anyEquals(userRoles, taskRoles);
     }
 
     // Process Instance concern
@@ -44,7 +44,7 @@ abstract class AbstractUsher implements Usher {
         ProcessDefinition pd = procQuery.findProcessDefinition(pi);
         Task task = procQuery.findTask(pd, taskName);
         Iterable<Task> activeTasks = procQuery.getActiveTasks(pi);
-        return anyEquals(task, activeTasks);
+        return Utils.anyEquals(task, activeTasks);
     }
 
     /**
@@ -52,24 +52,6 @@ abstract class AbstractUsher implements Usher {
      * BPMN might know for example the process instance owner user by means of process variables.
      */
     abstract boolean isTheActivePersonForTaskOfInstance(String username, String taskName, String appInstanceId);
-
-    static <T> boolean anyEquals(Iterable<T> roles1, Iterable<T> roles2) {
-        for (T role1 : roles1) {
-            if (anyEquals(role1, roles2)){
-                return true;
-            } 
-        }
-        return false;
-    }
-
-    static <T> boolean anyEquals(T task, Iterable<T> activeTasks) {
-        for (T activeTask : activeTasks) {
-            if (activeTask.equals(task)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }
 
 interface UsherRoleQuery {
@@ -90,7 +72,7 @@ interface UsherProcessQuery extends UsherProcessTopologyQuery {
     ProcessInstance findProcessInstance(String appInstanceId);
 }
 
-class ModelDrivenUsherProcessTopologyQuery implements UsherProcessTopologyQuery {
+final class ModelDrivenUsherProcessTopologyQuery implements UsherProcessTopologyQuery {
     @Override
     public ProcessDefinition findProcessDefinition(String processId) {
         return ProcessDefinitions.valueOf(processId);
@@ -193,5 +175,21 @@ abstract class Utils {
             set.add(t);
         }
         return set;
+    }
+    static <T> boolean anyEquals(Iterable<T> roles1, Iterable<T> roles2) {
+        for (T role1 : roles1) {
+            if (anyEquals(role1, roles2)){
+                return true;
+            } 
+        }
+        return false;
+    }
+    static <T> boolean anyEquals(T task, Iterable<T> activeTasks) {
+        for (T activeTask : activeTasks) {
+            if (activeTask.equals(task)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
