@@ -13,7 +13,8 @@ interface Usher {
 
 abstract class AbstractUsher implements Usher {
 
-    private UsherQuery query;
+    private UsherProcessQuery procQuery;
+    private UsherRoleQuery roleQuery;
 
     public boolean canExecute(String username, String processId, String taskName, String appInstanceId) {
         return 
@@ -27,19 +28,19 @@ abstract class AbstractUsher implements Usher {
 
     // Process Definition concern
     boolean hasRoleForTask(String username, String processId, String taskName) {
-        Iterable<Role> userRoles = query.findRoles(username);
-        ProcessDefinition pd = query.findProcessDefinition(processId);
-        Task task = query.findTask(pd, taskName);
-        Iterable<Role> taskRoles = query.findTaskRoles(task);
+        Iterable<Role> userRoles = roleQuery.findRoles(username);
+        ProcessDefinition pd = procQuery.findProcessDefinition(processId);
+        Task task = procQuery.findTask(pd, taskName);
+        Iterable<Role> taskRoles = procQuery.findTaskRoles(task);
         return anyEquals(userRoles, taskRoles);
     }
 
     // Process Instance concern
     boolean isActiveTask(String taskName, String appInstanceId) {
-        ProcessInstance pi = query.findProcessInstance(appInstanceId);
-        ProcessDefinition pd = query.findProcessDefinition(pi);
-        Task task = query.findTask(pd, taskName);
-        Iterable<Task> activeTasks = query.getActiveTasks(pi);
+        ProcessInstance pi = procQuery.findProcessInstance(appInstanceId);
+        ProcessDefinition pd = procQuery.findProcessDefinition(pi);
+        Task task = procQuery.findTask(pd, taskName);
+        Iterable<Task> activeTasks = procQuery.getActiveTasks(pi);
         return anyEquals(task, activeTasks);
     }
 
@@ -68,8 +69,11 @@ abstract class AbstractUsher implements Usher {
     }
 }
 
-interface UsherQuery {
+interface UsherRoleQuery {
     Iterable<Role> findRoles(String username);
+}
+
+interface UsherProcessQuery {
     ProcessDefinition findProcessDefinition(String processId);
     Task findTask(ProcessDefinition pd, String taskName);
     Iterable<Role> findTaskRoles(Task task);
@@ -83,3 +87,7 @@ interface Role {}
 interface ProcessDefinition {}
 interface Task {}
 interface ProcessInstance {}
+
+enum ProcessDefinitions implements ProcessDefinition {
+    EXAMPLE_SM_PROCESS;    
+}
