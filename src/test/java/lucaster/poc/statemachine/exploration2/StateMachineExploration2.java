@@ -13,7 +13,7 @@ interface Usher {
 
 abstract class AbstractUsher implements Usher {
 
-    private Query query;
+    private UsherQuery query;
 
     public boolean canExecute(String username, String processId, String taskName, String appInstanceId) {
         return 
@@ -44,7 +44,8 @@ abstract class AbstractUsher implements Usher {
     }
 
     /**
-     * Application - specific
+     * SM does not know single users, so this becomes an application concern
+     * BPMN might know for example the process instance owner user by means of process variables.
      */
     abstract boolean isTheActivePersonForTaskOfInstance(String username, String taskName, String appInstanceId);
 
@@ -67,7 +68,7 @@ abstract class AbstractUsher implements Usher {
     }
 }
 
-interface Query {
+interface UsherQuery {
     Iterable<Role> findRoles(String username);
     ProcessDefinition findProcessDefinition(String processId);
     Task findTask(ProcessDefinition pd, String taskName);
