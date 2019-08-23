@@ -19,7 +19,8 @@ abstract class AbstractUsher implements Usher {
     private UsherProcessQuery procQuery;
     private UsherRoleQuery roleQuery;
 
-    public boolean canExecute(String username, String processId, String taskName, String appInstanceId) {
+    // Template method
+    final public boolean canExecute(String username, String processId, String taskName, String appInstanceId) {
         return 
             hasRoleForTask(username, processId, taskName) 
             && 
@@ -30,16 +31,16 @@ abstract class AbstractUsher implements Usher {
     }
 
     // Process Definition concern
-    boolean hasRoleForTask(String username, String processId, String taskName) {
+    final boolean hasRoleForTask(String username, String processId, String taskName) {
         Iterable<Role> userRoles = roleQuery.findRoles(username);
         ProcessDefinition pd = procQuery.findProcessDefinition(processId);
         Task task = procQuery.findTask(pd, taskName);
-        Iterable<Role> taskRoles = procQuery.findTaskRoles(task);
+        Iterable<Role> taskRoles = procQuery.findTaskAllowedRoles(task);
         return Utils.anyEquals(userRoles, taskRoles);
     }
 
     // Process Instance concern
-    boolean isActiveTask(String taskName, String appInstanceId) {
+    final boolean isActiveTask(String taskName, String appInstanceId) {
         ProcessInstance pi = procQuery.findProcessInstance(appInstanceId);
         ProcessDefinition pd = procQuery.findProcessDefinition(pi);
         Task task = procQuery.findTask(pd, taskName);
@@ -62,7 +63,7 @@ interface UsherRoleQuery {
 interface UsherProcessTopologyQuery {
     ProcessDefinition findProcessDefinition(String processId);
     Task findTask(ProcessDefinition pd, String taskName);
-    Iterable<Role> findTaskRoles(Task task);
+    Iterable<Role> findTaskAllowedRoles(Task task);
     ProcessDefinition findProcessDefinition(ProcessInstance pi);
     // If SM, active tasks are the current state's outgoing transitions. If BPMN, active tasks are the active tasks.
     Iterable<Task> getActiveTasks(ProcessInstance pi);
@@ -82,8 +83,8 @@ final class ModelDrivenUsherProcessTopologyQuery implements UsherProcessTopology
         return pd.findTaskByName(taskName);
     }
     @Override
-    public Iterable<Role> findTaskRoles(Task task) {
-        return task.getRoles();
+    public Iterable<Role> findTaskAllowedRoles(Task task) {
+        return task.getAllowedRoles();
     }
     @Override
     public ProcessDefinition findProcessDefinition(ProcessInstance pi) {
@@ -95,15 +96,15 @@ final class ModelDrivenUsherProcessTopologyQuery implements UsherProcessTopology
     }
 }
 
-interface Role {}
 interface ProcessDefinition {
     String getProcessId();
     Task findTaskByName(String taskName);
 }
 interface Task {
     String getTaskName();
-    Iterable<Role> getRoles();
+    Iterable<Role> getAllowedRoles();
 }
+interface Role {}
 interface ProcessInstance {
     ProcessDefinition getProcessDefinition();
     Iterable<Task> getActiveTasks();
@@ -157,7 +158,7 @@ enum ExampleSmProcessTasks implements Task {
         this.roles = roles;
     }
     @Override
-    public Iterable<Role> getRoles() {
+    public Iterable<Role> getAllowedRoles() {
         return roles;
     }
 }
