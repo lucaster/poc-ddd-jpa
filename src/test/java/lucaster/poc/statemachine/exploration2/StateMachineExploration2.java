@@ -1,5 +1,8 @@
 package lucaster.poc.statemachine.exploration2;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class StateMachineExploration2 {
     void explore() {
         Usher usher = null;
@@ -73,21 +76,77 @@ interface UsherRoleQuery {
     Iterable<Role> findRoles(String username);
 }
 
-interface UsherProcessQuery {
+// A repository of Process topology objects
+interface UsherProcessTopologyQuery {
     ProcessDefinition findProcessDefinition(String processId);
     Task findTask(ProcessDefinition pd, String taskName);
     Iterable<Role> findTaskRoles(Task task);
-    ProcessInstance findProcessInstance(String appInstanceId);
     ProcessDefinition findProcessDefinition(ProcessInstance pi);
     // If SM, active tasks are the current state's outgoing transitions. If BPMN, active tasks are the active tasks.
     Iterable<Task> getActiveTasks(ProcessInstance pi);
 }
 
+interface UsherProcessQuery extends UsherProcessTopologyQuery {
+    ProcessInstance findProcessInstance(String appInstanceId);
+}
+
+abstract class EnumStateMachineUsherProcessTopologyQuery implements UsherProcessTopologyQuery {
+    @Override
+    public ProcessDefinition findProcessDefinition(String processId) {
+        return ProcessDefinitions.valueOf(processId);
+    }
+    @Override
+    public Task findTask(ProcessDefinition pd, String taskName) {
+        return pd.findTaskByName(taskName);
+    }
+}
+
 interface Role {}
-interface ProcessDefinition {}
-interface Task {}
+interface ProcessDefinition {
+    String getProcessId();
+    Task findTaskByName(String taskName);
+}
+interface Task {
+    String getTaskName();
+}
 interface ProcessInstance {}
 
 enum ProcessDefinitions implements ProcessDefinition {
-    EXAMPLE_SM_PROCESS;    
+    EXAMPLE_SM_PROCESS {
+        @Override
+        public String getProcessId() {
+            return "EXAMPLE_SM_PROCESS";
+        }
+        @Override
+        protected Iterable<Task> getTasks() {
+            Set<Task> tasks = new HashSet<>(); // TODO make this a field populated in ctor
+            tasks.add(ExampleSmProcessTasks.TASK1);
+            tasks.add(ExampleSmProcessTasks.TASK2);
+            return tasks;
+        }
+    };
+    public abstract String getProcessId();
+    protected abstract Iterable<Task> getTasks();
+    public Task findTaskByName(String taskName) {
+        for (Task t : getTasks()) {
+            if (t.getTaskName().equals(taskName)) {
+                return t;
+            }
+        }
+        return null;
+    }
+}
+enum ExampleSmProcessTasks implements Task {
+    TASK1 {
+        @Override
+        public String getTaskName() {
+            return "TASK1";
+        }
+    }, 
+    TASK2 {
+        @Override
+        public String getTaskName() {
+            return "TASK1";
+        }
+    };
 }
