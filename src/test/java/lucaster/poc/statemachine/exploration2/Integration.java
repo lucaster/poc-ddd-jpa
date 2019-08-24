@@ -5,7 +5,7 @@ package lucaster.poc.statemachine.exploration2;
  * @author Luca Cavagnoli
  *
  */
-class AppProcInst {
+abstract class AppProcInst {
     final ProcessInstance pi;
     final String appInstanceId;
     AppProcInst(ProcessInstance pi, String appInstanceId /* + active state if FSM or active tasks if BPMN */) {
