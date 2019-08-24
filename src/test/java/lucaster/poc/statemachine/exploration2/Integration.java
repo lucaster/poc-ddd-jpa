@@ -16,3 +16,16 @@ class AppProcInst {
         this.appInstanceId = appInstanceId;
     }
 }
+
+class StateMachineSimpleIntegration {
+	final String appInstanceId;
+	final String processInstanceId;
+	final String activeStateFullyQualifiedName; // FQ così è già univoco per quando passeremo a data-driven
+	protected Long versionForOptimisticLocking;
+	public StateMachineSimpleIntegration(String appInstanceId, String processInstanceId, String activeStateFullyQualifiedName) {
+		super();
+		this.appInstanceId = appInstanceId;
+		this.processInstanceId = processInstanceId;
+		this.activeStateFullyQualifiedName = activeStateFullyQualifiedName;
+	}
+}
