@@ -1,5 +1,6 @@
 package lucaster.poc.statemachine.exploration2;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,9 +10,17 @@ interface Usher {
 
 abstract class AbstractUsher implements Usher {
 
-    private UsherProcessIntegrationQuery procIntegrQuery;
-    private UsherProcessTopologyQuery procTopoQuery;
-    private UsherRoleQuery roleQuery;
+    private final UsherProcessIntegrationQuery procIntegrQuery;
+    private final UsherProcessTopologyQuery procTopoQuery;
+    private final UsherRoleQuery roleQuery;
+
+    public AbstractUsher(   UsherProcessIntegrationQuery procIntegrQuery, 
+                            UsherProcessTopologyQuery procTopoQuery,
+                            UsherRoleQuery roleQuery) {
+        this.procIntegrQuery = procIntegrQuery;
+        this.procTopoQuery = procTopoQuery;
+        this.roleQuery = roleQuery;
+    }
 
     // Template method
     @Override
@@ -19,21 +28,18 @@ abstract class AbstractUsher implements Usher {
         ProcessInstance pi = procIntegrQuery.findProcessInstance(appInstanceId);
         ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
         String processId = pd.getProcessId();
-        return 
-            hasRoleForTask(username, processId, taskName) 
-            && 
-            isActiveTask(taskName, appInstanceId) 
-            && 
-            isTheActivePersonForTaskOfInstance(username, taskName, appInstanceId)
-            ;
+        boolean hasRoleForTask = hasRoleForTask(username, processId, taskName);
+		boolean isActiveTask = isActiveTask(taskName, appInstanceId);
+		boolean isTheActivePersonForTaskOfInstance = isTheActivePersonForTaskOfInstance(username, taskName, appInstanceId);
+		return hasRoleForTask && isActiveTask && isTheActivePersonForTaskOfInstance;
     }
 
     // Process Definition concern
     final boolean hasRoleForTask(String username, String processId, String taskName) {
-        Iterable<Role> userRoles = roleQuery.findRoles(username);
+        Iterable<ProcessRole> userRoles = roleQuery.findRoles(username);
         ProcessDefinition pd = procTopoQuery.findProcessDefinition(processId);
         Task task = procTopoQuery.findTask(pd, taskName);
-        Iterable<Role> taskRoles = procTopoQuery.getAllowedRolesOfTask(task);
+        Iterable<ProcessRole> taskRoles = procTopoQuery.getAllowedRolesOfTask(task);
         return Utils.anyEquals(userRoles, taskRoles);
     }
 
@@ -58,14 +64,14 @@ interface UsherRoleQuery {
      * Username -> Bank Profiles
      * BankProfile -> Roles
      */
-    Iterable<Role> findRoles(String username);
+    Iterable<ProcessRole> findRoles(String username);
 }
 
 // A repository of Process topology objects
 interface UsherProcessTopologyQuery {
     ProcessDefinition findProcessDefinition(String processId);
     Task findTask(ProcessDefinition pd, String taskName);
-    Iterable<Role> getAllowedRolesOfTask(Task task);
+    Iterable<ProcessRole> getAllowedRolesOfTask(Task task);
     ProcessDefinition findProcessDefinition(ProcessInstance pi);
     // If SM, active tasks are the current state's outgoing transitions. If BPMN, active tasks are the active tasks.
     Iterable<Task> getActiveTasks(ProcessInstance pi);
@@ -78,14 +84,14 @@ interface UsherProcessIntegrationQuery {
 final class ModelDrivenUsherProcessTopologyQuery implements UsherProcessTopologyQuery {
     @Override
     public ProcessDefinition findProcessDefinition(String processId) {
-        return ProcessDefinitions.valueOf(processId);
+        return StateMachineProcessDefinition.valueOf(processId);
     }
     @Override
     public Task findTask(ProcessDefinition pd, String taskName) {
         return pd.findTaskByName(taskName);
     }
     @Override
-    public Iterable<Role> getAllowedRolesOfTask(Task task) {
+    public Iterable<ProcessRole> getAllowedRolesOfTask(Task task) {
         return task.getAllowedRoles();
     }
     @Override
@@ -104,70 +110,15 @@ interface ProcessDefinition {
 }
 interface Task {
     String getTaskName();
-    Iterable<Role> getAllowedRoles();
+    Iterable<ProcessRole> getAllowedRoles();
 }
-interface Role {}
+interface ProcessRole {}
 interface ProcessInstance {
     ProcessDefinition getProcessDefinition();
     Iterable<Task> getActiveTasks();
 }
 
-enum ProcessDefinitions implements ProcessDefinition {
 
-    EXAMPLE_SM_PROCESS(Utils.<Task>toSet(ExampleSmProcessTasks.TASK1, ExampleSmProcessTasks.TASK2)) {
-        @Override
-        public String getProcessId() {
-            return "EXAMPLE_SM_PROCESS";
-        }
-    };
-
-    protected final Iterable<Task> tasks;
-
-    ProcessDefinitions(Iterable<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public abstract String getProcessId();
-
-    protected Iterable<Task> getTasks() {
-        return tasks;
-    }
-
-    public Task findTaskByName(String taskName) {
-        for (Task t : getTasks()) {
-            if (t.getTaskName().equals(taskName)) {
-                return t;
-            }
-        }
-        return null;
-    }
-}
-enum ExampleSmProcessTasks implements Task {
-    TASK1(Utils.<Role>toSet(ExampleSmProcessRoles.ROLE1)) {
-        @Override
-        public String getTaskName() {
-            return "TASK1";
-        }
-    }, 
-    TASK2(Utils.<Role>toSet(ExampleSmProcessRoles.ROLE2)) {
-        @Override
-        public String getTaskName() {
-            return "TASK1";
-        }
-    };
-    protected Iterable<Role> roles;
-    ExampleSmProcessTasks(Iterable<Role> roles) {
-        this.roles = roles;
-    }
-    @Override
-    public Iterable<Role> getAllowedRoles() {
-        return roles;
-    }
-}
-enum ExampleSmProcessRoles implements Role {
-    ROLE1,
-    ROLE2;
-}
 
 abstract class Utils {
     private Utils() {}
@@ -177,7 +128,7 @@ abstract class Utils {
         for (T t : args) {
             set.add(t);
         }
-        return set;
+        return Collections.unmodifiableSet(set);
     }
     static <T> boolean anyEquals(Iterable<T> roles1, Iterable<T> roles2) {
         for (T role1 : roles1) {
@@ -187,9 +138,9 @@ abstract class Utils {
         }
         return false;
     }
-    static <T> boolean anyEquals(T task, Iterable<T> activeTasks) {
-        for (T activeTask : activeTasks) {
-            if (activeTask.equals(task)) {
+    static <T> boolean anyEquals(T task1, Iterable<T> tasks2) {
+        for (T activeTask : tasks2) {
+            if (activeTask.equals(task1)) {
                 return true;
             }
         }
