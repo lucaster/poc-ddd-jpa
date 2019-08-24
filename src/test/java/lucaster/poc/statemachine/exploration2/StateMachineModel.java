@@ -54,10 +54,10 @@ enum StateMachineDefinitions implements ProcessDefinition, StateMachineDefinitio
 
 class StateMachineInstance implements ProcessInstance {
 
-	// Enum -> PROCESS_DEFINITION_ID   'EXAMPLE_SM_PROCESS'
+	// Enum -> PROCESS_DEFINITION_ID := 'EXAMPLE_SM_PROCESS'
     private final StateMachineDefinitions pd;
 
-    // Enum -> STATE_ID  'STATE1' il nome enum non sarà univoco tra tutti i processo
+    // Enum -> STATE_ID := 'STATE1' in data-driven il nome enum non sarà univoco tra tutti gli stati di tutte le sm
     private StateMachineState activeState;
 
     StateMachineInstance(StateMachineDefinitions pd) {
