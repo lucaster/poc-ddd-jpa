@@ -54,7 +54,10 @@ enum StateMachineDefinitions implements ProcessDefinition, StateMachineDefinitio
 
 class StateMachineInstance implements ProcessInstance {
 
+	// Enum -> PROCESS_DEFINITION_ID   'EXAMPLE_SM_PROCESS'
     private final StateMachineDefinitions pd;
+
+    // Enum -> STATE_ID  'STATE1' il nome enum non sarà univoco tra tutti i processo
     private StateMachineState activeState;
 
     StateMachineInstance(StateMachineDefinitions pd) {
@@ -71,6 +74,10 @@ class StateMachineInstance implements ProcessInstance {
         return activeTasks;
     }
 
+    String getUniversalActiveStateName() {
+    	return String.format("%s.%s", pd.getProcessId(), activeState.getName());
+    }
+    
     private StateMachineState getActiveState() {
         return activeState;
     }

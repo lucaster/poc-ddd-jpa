@@ -6,7 +6,9 @@ package lucaster.poc.statemachine.exploration2;
  *
  */
 class AppProcInst {
+	// PROCESS_INSTANCE_ID
     final ProcessInstance pi;
+    // APP_INSTANCE_ID
     final String appInstanceId;
     protected Long versionForOptimisticLocking;
     AppProcInst(ProcessInstance pi, String appInstanceId) {

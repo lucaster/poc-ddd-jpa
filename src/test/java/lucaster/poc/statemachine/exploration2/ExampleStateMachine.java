@@ -1,15 +1,20 @@
 package lucaster.poc.statemachine.exploration2;
 
 enum ExampleSmProcessStates implements StateMachineState {
-	STATE1(false),
-	STATE2(false),
-	STATE3(true);
+	STATE1("STATE1", false),
+	STATE2("STATE2", false),
+	STATE3("STATE3", true);
+	private final String name;
 	private final boolean isFinal;
-	ExampleSmProcessStates(boolean isFinal) {
+	ExampleSmProcessStates(String name, boolean isFinal) {
+		this.name = name;
 		this.isFinal = isFinal;
 	}
 	@Override public boolean isFinal() {
 		return isFinal;
+	}
+	@Override public String getName() {
+		return name;
 	}
 }
 enum ExampleSmProcessRoles implements ProcessRole {
