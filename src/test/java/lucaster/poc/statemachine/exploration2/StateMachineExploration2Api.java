@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 interface Usher {
-    boolean canExecute(String username, String processId, String taskId, String appInstanceId);
+    boolean canExecute(String username, String taskName, String appInstanceId);
 }
 
 abstract class AbstractUsher implements Usher {
@@ -15,7 +15,10 @@ abstract class AbstractUsher implements Usher {
 
     // Template method
     @Override
-    final public boolean canExecute(String username, String processId, String taskName, String appInstanceId) {
+    final public boolean canExecute(String username, String taskName, String appInstanceId) {
+        ProcessInstance pi = procIntegrQuery.findProcessInstance(appInstanceId);
+        ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
+        String processId = pd.getProcessId();
         return 
             hasRoleForTask(username, processId, taskName) 
             && 
@@ -44,7 +47,7 @@ abstract class AbstractUsher implements Usher {
     }
 
     /**
-     * SM does not know single users, so this becomes an application concern
+     * SM does not know single users, so this becomes an application concern.
      * BPMN might know for example the process instance owner user by means of process variables.
      */
     abstract boolean isTheActivePersonForTaskOfInstance(String username, String taskName, String appInstanceId);
