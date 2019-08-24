@@ -59,17 +59,5 @@ class ExampleUsherRoleQuery implements UsherRoleQuery {
 
 }
 
-/**
- * Links Process Instance and app-specific data
- * @author Luca Cavagnoli
- *
- */
-class AppProcInst {
-    final ProcessInstance pi;
-    final String appInstanceId;
-    AppProcInst(ProcessInstance pi, String appInstanceId /* + active state if FSM or active tasks if BPMN */) {
-        this.pi = pi;
-        this.appInstanceId = appInstanceId;
-    }
-}
+
 
