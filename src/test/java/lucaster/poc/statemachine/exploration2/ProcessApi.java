@@ -14,6 +14,7 @@ interface ProcessRole {
 }
 
 interface ProcessInstance {
+	String getProcessInstanceId();
 	ProcessDefinition getProcessDefinition();
 	Iterable<Task> getActiveTasks();
 }
