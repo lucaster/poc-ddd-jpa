@@ -5,7 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 abstract class Utils {
-    private Utils() {}
+    private static final String STATE_FQNAME_SEPARATOR = "|";
+	private Utils() {}
     @SafeVarargs
     public static <T> Set<T> toSet(T... args) {
         Set<T> set = new HashSet<>();
@@ -31,6 +32,6 @@ abstract class Utils {
         return false;
     }
     static String makeFullyQualifiedStateName(String processDefinitionId, String stateName) {
-    	 return String.format("%s|||%s", processDefinitionId, stateName);
+    	 return String.format("%s%s%s", processDefinitionId, STATE_FQNAME_SEPARATOR, stateName);
     }
 }
