@@ -134,4 +134,7 @@ abstract class Utils {
         }
         return false;
     }
+    static String makeFullyQualifiedStateName(String processDefinitionId, String stateName) {
+    	 return String.format("%s|||%s", processDefinitionId, stateName);
+    }
 }

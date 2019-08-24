@@ -29,6 +29,6 @@ class StateMachineSimpleIntegration {
 		this.processInstanceId = processInstanceId;
 		this.processDefinitionId = processDefinitionId;
 		this.activeStateName = activeStateName;
-		this.activeStateFullyQualifiedName = String.format("%s.%s", processDefinitionId, activeStateName); // TODO: DRY stateFnName build
+		this.activeStateFullyQualifiedName = Utils.makeFullyQualifiedStateName(processDefinitionId, activeStateName);
 	}
 }

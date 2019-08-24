@@ -70,7 +70,7 @@ enum ExampleSmProcessStates implements StateMachineState {
 	}
 	// NaturalId, also good for Id
 	@Override public String getFullyQualifiedName() {
-		return String.format("%s.%s", StateMachineDefinitions.EXAMPLE_SM_PROCESS.getProcessDefinitionId(), getName());
+		return Utils.makeFullyQualifiedStateName(StateMachineDefinitions.EXAMPLE_SM_PROCESS.getProcessDefinitionId(), getName());
 	}
 }
 enum ExampleSmProcessRoles implements ProcessRole {
