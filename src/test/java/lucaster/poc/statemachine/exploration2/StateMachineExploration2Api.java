@@ -84,7 +84,7 @@ interface UsherProcessIntegrationQuery {
 final class ModelDrivenUsherProcessTopologyQuery implements UsherProcessTopologyQuery {
     @Override
     public ProcessDefinition findProcessDefinition(String processId) {
-        return StateMachineProcessDefinition.valueOf(processId);
+        return StateMachineDefinitions.valueOf(processId);
     }
     @Override
     public Task findTask(ProcessDefinition pd, String taskName) {
@@ -104,19 +104,7 @@ final class ModelDrivenUsherProcessTopologyQuery implements UsherProcessTopology
     }
 }
 
-interface ProcessDefinition {
-    String getProcessId();
-    Task findTaskByName(String taskName);
-}
-interface Task {
-    String getTaskName();
-    Iterable<ProcessRole> getAllowedRoles();
-}
-interface ProcessRole {}
-interface ProcessInstance {
-    ProcessDefinition getProcessDefinition();
-    Iterable<Task> getActiveTasks();
-}
+
 
 
 
