@@ -8,6 +8,7 @@ interface StateMachineDefinition extends ProcessDefinition {
 
 interface StateMachineState {
 	String getName();
+	String getFullyQualifiedName();
 	boolean isFinal();
 }
 

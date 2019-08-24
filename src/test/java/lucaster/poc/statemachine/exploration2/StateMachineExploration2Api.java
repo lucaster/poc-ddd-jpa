@@ -27,7 +27,7 @@ abstract class AbstractUsher implements Usher {
     final public boolean canExecute(String username, String taskName, String appInstanceId) {
         ProcessInstance pi = procIntegrQuery.findProcessInstance(appInstanceId);
         ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
-        String processId = pd.getProcessId();
+        String processId = pd.getProcessDefinitionId();
         boolean hasRoleForTask = hasRoleForTask(username, processId, taskName);
 		boolean isActiveTask = isActiveTask(taskName, appInstanceId);
 		boolean isTheActivePersonForTaskOfInstance = isTheActivePersonForTaskOfInstance(username, taskName, appInstanceId);

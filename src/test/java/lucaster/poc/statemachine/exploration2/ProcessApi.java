@@ -1,7 +1,7 @@
 package lucaster.poc.statemachine.exploration2;
 
 interface ProcessDefinition {
-	String getProcessId();
+	String getProcessDefinitionId();
 	Task findTaskByName(String taskName);
 }
 

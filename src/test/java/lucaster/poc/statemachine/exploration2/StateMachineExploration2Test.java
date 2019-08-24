@@ -33,7 +33,7 @@ public class StateMachineExploration2Test {
 	public void hasRoleForTask() {
 		ProcessInstance pi = procIntegrQuery.findProcessInstance(appInstanceId);
 		ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
-		String processId = pd.getProcessId();
+		String processId = pd.getProcessDefinitionId();
 		boolean hasRoleForTask = ((ExampleUsher) usher).hasRoleForTask(username, processId, taskName);
 		assertTrue(hasRoleForTask);
 	}
@@ -48,7 +48,7 @@ public class StateMachineExploration2Test {
 	public void findTask() {
 		ProcessInstance pi = procIntegrQuery.findProcessInstance(appInstanceId);
 		ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
-		String processId = pd.getProcessId();
+		String processId = pd.getProcessDefinitionId();
 		ProcessDefinition pd2 = procTopoQuery.findProcessDefinition(processId);
 		Task task = procTopoQuery.findTask(pd, taskName);
 		Task task2 = procTopoQuery.findTask(pd2, taskName);
