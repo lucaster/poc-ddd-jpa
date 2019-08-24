@@ -4,7 +4,7 @@ import java.util.UUID;
 
 class StateMachineInstance implements ProcessInstance {
 	
-	private final String id = UUID.randomUUID().toString();
+	private final String id;
 
 	// Enum -> PROCESS_DEFINITION_ID := 'EXAMPLE_SM_PROCESS' enum name as id is ok for process definition
     private final StateMachineDefinitions pd;
@@ -15,6 +15,12 @@ class StateMachineInstance implements ProcessInstance {
 
     StateMachineInstance(StateMachineDefinitions pd) {
         this.pd = pd;
+        id = UUID.randomUUID().toString();
+    }
+
+    StateMachineInstance(String id, StateMachineDefinitions pd) {
+    	this.pd = pd;
+        this.id = id;
     }
     
     @Override public String getProcessInstanceId() {

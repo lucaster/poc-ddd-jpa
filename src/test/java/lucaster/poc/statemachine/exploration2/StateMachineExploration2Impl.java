@@ -49,8 +49,8 @@ class ExampleUsherProcessIntegrationQuery implements UsherProcessIntegrationQuer
     @Override
     public ProcessInstance findProcessInstance(String appInstanceId) {
         ProcessInstance fromProcInstRepo = findProcessInstanceFromProcInstRepo(appInstanceId);
-        ProcessInstance fromSimple = findProcessInstanceFromProcSimpleRepo(appInstanceId);
-		return fromSimple;
+        ProcessInstance fromSimpleRepo = findProcessInstanceFromProcSimpleRepo(appInstanceId);
+		return fromSimpleRepo;
     }
 
 	private ProcessInstance findProcessInstanceFromProcInstRepo(String appInstanceId) {
@@ -66,7 +66,7 @@ class ExampleUsherProcessIntegrationQuery implements UsherProcessIntegrationQuer
 		for (StateMachineSimpleIntegration api : simpleRepo) {
             if (appInstanceId.equals(api.appInstanceId)) {
             	StateMachineDefinitions pd = StateMachineDefinitions.valueOf(api.processDefinitionId);
-            	StateMachineInstance instance = new StateMachineInstance(pd);
+            	StateMachineInstance instance = new StateMachineInstance(api.processInstanceId, pd);
             	StateMachineState activeState = findStateMachineState(pd, api.activeStateName);
                 instance.setActiveState(activeState);
                 return instance;
