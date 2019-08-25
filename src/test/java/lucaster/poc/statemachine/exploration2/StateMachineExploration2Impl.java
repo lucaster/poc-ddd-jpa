@@ -44,8 +44,8 @@ class UsherProcessTopologyQueryImpl implements UsherProcessTopologyQuery {
 }
 
 class UsherProcessIntegrationQueryImpl implements UsherProcessIntegrationQuery {
-    private final IntegrationRepository integrationRepo;
-    public UsherProcessIntegrationQueryImpl(IntegrationRepository integrationRepo) {
+    private final IntegrationProcessInstanceRepository integrationRepo;
+    public UsherProcessIntegrationQueryImpl(IntegrationProcessInstanceRepository integrationRepo) {
 		this.integrationRepo = integrationRepo;
 	}
     @Override public ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId) {

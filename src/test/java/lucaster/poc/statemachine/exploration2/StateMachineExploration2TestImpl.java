@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * For data-driven.
  */
-class TestDataDrivenIntegrationRepository implements IntegrationRepository {
+class TestDataDrivenIntegrationRepository implements IntegrationProcessInstanceRepository {
 	private static final Set<StateMachineDataDrivenIntegration> procInstRepo;
 	static {
 		procInstRepo = new HashSet<>();
@@ -37,7 +37,7 @@ class TestDataDrivenIntegrationRepository implements IntegrationRepository {
 /**
  * For not data-driven
  */
-class TestSimpleIntegrationRepository implements IntegrationRepository {
+class TestSimpleIntegrationRepository implements IntegrationProcessInstanceRepository {
 	private static final Set<StateMachineSimpleIntegration> repo;
 	static {
 		repo = new HashSet<>();

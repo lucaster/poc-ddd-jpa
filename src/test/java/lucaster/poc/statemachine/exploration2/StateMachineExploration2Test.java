@@ -9,7 +9,7 @@ import org.junit.Test;
 public class StateMachineExploration2Test {
 
 	ProcessRoleRepository processRoleRepository;
-	IntegrationRepository integrationRepository;
+	IntegrationProcessInstanceRepository integrationRepository;
 	ProcessDefinitionRepository processDefinitionRepository;
 	UsherProcessIntegrationQuery procIntegrQuery;
 	UsherProcessTopologyQuery procTopoQuery;
