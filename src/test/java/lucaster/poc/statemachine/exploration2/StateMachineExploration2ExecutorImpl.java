@@ -3,11 +3,16 @@ package lucaster.poc.statemachine.exploration2;
 class ExecutorImpl implements Executor {
 	private final ExecutorQuery query;
 	private final ProcessIntegrationRepository integrationRepo;
-	ExecutorImpl(ExecutorQuery query, ProcessIntegrationRepository integrationRepo) {
+	private final Usher usher;
+	ExecutorImpl(ExecutorQuery query, ProcessIntegrationRepository integrationRepo, Usher usher) {
 		this.query = query;
 		this.integrationRepo = integrationRepo;
+		this.usher = usher;
 	}
-	@Override public void execute(String appInstanceId, String taskName) {
+	@Override public void execute(String username, String appInstanceId, String taskName) {
+		if (!usher.canExecute(username, taskName, appInstanceId)) {
+			throw new RuntimeException(new IllegalStateException());
+		}
 		ProcessInstance pi = query.findProcessInstanceByAppInstanceId(appInstanceId);
 		Task task = query.findTask(pi, taskName);
 		pi.executeTask(task);

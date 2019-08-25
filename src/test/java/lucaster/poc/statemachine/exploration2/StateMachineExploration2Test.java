@@ -32,7 +32,7 @@ public class StateMachineExploration2Test {
 		roleQuery = new UsherRoleQueryImpl(processRoleRepository);
 		usher = new TestUsherImpl(procIntegrQuery, procTopoQuery, roleQuery);
 		executorQuery = new ExecutorQueryImpl(integrationRepository, procTopoQuery);
-		executor = new ExecutorImpl(executorQuery, integrationRepository);
+		executor = new ExecutorImpl(executorQuery, integrationRepository, usher);
 
 		username = "EE53414";
 		taskName = ExampleSmProcessTransitions.TASK1.getTaskName();
@@ -76,7 +76,7 @@ public class StateMachineExploration2Test {
 
 	@Test
 	public void execute() {
-		executor.execute(appInstanceId, taskName);
+		executor.execute(username, appInstanceId, taskName);
 		ProcessInstance processInstance = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
 		StateMachineInstance stateMachineInstance = (StateMachineInstance) processInstance;
 		StateMachineState activeState = stateMachineInstance.getActiveState();
