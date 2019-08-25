@@ -23,7 +23,7 @@ class TestDataDrivenStateMachineIntegrationRepository implements ProcessIntegrat
 	    StateMachineDataDrivenIntegration appProcInst = new StateMachineDataDrivenIntegration(pi, appInstanceId);
 	    repo.add(appProcInst);
 	}
-	@Override public ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId) {
+	@Override public ProcessInstance findProcessInstanceByAppInstanceId(String appInstanceId) {
 		for (StateMachineDataDrivenIntegration api : repo) {
             if (appInstanceId.equals(api.appInstanceId)) {
                 return api.pi;
@@ -62,7 +62,7 @@ class TestSimpleStateMachineIntegrationRepository implements ProcessIntegrationR
         	)
         );
 	}
-	@Override public ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId) {
+	@Override public ProcessInstance findProcessInstanceByAppInstanceId(String appInstanceId) {
 		for (StateMachineSimpleIntegration api : repo) {
             if (appInstanceId.equals(api.appInstanceId)) {
             	StateMachineProcessDefinition pd = StateMachineProcessDefinition.valueOf(api.processDefinitionId);

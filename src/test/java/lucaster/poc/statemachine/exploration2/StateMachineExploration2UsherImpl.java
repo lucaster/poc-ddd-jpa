@@ -49,6 +49,6 @@ class UsherProcessIntegrationQueryImpl implements UsherProcessIntegrationQuery {
 		this.integrationRepo = integrationRepo;
 	}
     @Override public ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId) {
-        return integrationRepo.findProcessInstanceByAppIntanceId(appInstanceId);
+        return integrationRepo.findProcessInstanceByAppInstanceId(appInstanceId);
     }
 }

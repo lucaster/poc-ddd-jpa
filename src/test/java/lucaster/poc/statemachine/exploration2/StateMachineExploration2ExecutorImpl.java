@@ -32,7 +32,7 @@ class ExecutorQueryImpl implements ExecutorQuery {
 
 	@Override
 	public ProcessInstance findProcessInstanceByAppInstanceId(String appInstanceId) {
-		return integrationRepository.findProcessInstanceByAppIntanceId(appInstanceId);
+		return integrationRepository.findProcessInstanceByAppInstanceId(appInstanceId);
 	}
 
 	@Override

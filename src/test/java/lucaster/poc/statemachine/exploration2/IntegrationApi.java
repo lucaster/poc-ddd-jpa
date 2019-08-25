@@ -1,7 +1,7 @@
 package lucaster.poc.statemachine.exploration2;
 
 interface ProcessIntegrationRepository {
-	ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId);
+	ProcessInstance findProcessInstanceByAppInstanceId(String appInstanceId);
 	void updateIntegrationInfo(ProcessInstance pi, String appInstanceId);
 }
 
