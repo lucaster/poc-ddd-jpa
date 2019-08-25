@@ -102,4 +102,9 @@ public class StateMachineExploration2Test {
 		assertFalse(usher.canExecute(username2, task1Name, appInstanceId));
 		assertFalse(usher.canExecute(username2, task2Name, appInstanceId));
 	}
+
+	@Test(expected = RuntimeException.class)
+	public void cannotExecute() {
+		executor.execute(username2, appInstanceId, task1Name);
+	}
 }
