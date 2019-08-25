@@ -57,9 +57,8 @@ class TestSimpleIntegrationRepository implements IntegrationProcessInstanceRepos
 		for (StateMachineSimpleIntegration api : repo) {
             if (appInstanceId.equals(api.appInstanceId)) {
             	StateMachineProcessDefinition pd = StateMachineProcessDefinition.valueOf(api.processDefinitionId);
-            	StateMachineInstance instance = new StateMachineInstance(api.processInstanceId, pd);
             	StateMachineState activeState = findStateMachineState(pd, api.activeStateName);
-                instance.setActiveState(activeState);
+            	StateMachineInstance instance = new StateMachineInstance(api.processInstanceId, pd, activeState);
                 return instance;
             }
         }
