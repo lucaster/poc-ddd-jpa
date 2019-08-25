@@ -15,6 +15,7 @@ interface ProcessInstance {
 	ProcessDefinition getProcessDefinition();
 	Iterable<Task> getActiveTasks();
 	void executeTask(Task task);
+	boolean isCompleted();
 }
 interface ProcessDefinitionRepository {
 	ProcessDefinition findProcessDefinition(String processId);

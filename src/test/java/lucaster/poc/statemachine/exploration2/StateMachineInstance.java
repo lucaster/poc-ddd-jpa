@@ -81,4 +81,9 @@ class StateMachineInstance implements ProcessInstance {
 		}
 		setActiveState(transition.getTo());
 	}
+
+	@Override
+	public boolean isCompleted() {
+		return getActiveState().isFinal();
+	}
 }

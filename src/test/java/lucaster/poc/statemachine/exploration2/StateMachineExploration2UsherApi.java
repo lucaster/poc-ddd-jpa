@@ -24,10 +24,11 @@ abstract class AbstractUsher implements Usher {
         ProcessInstance pi = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
         ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
         String processId = pd.getProcessDefinitionId();
+        boolean isInstanceCompleted = pi.isCompleted();
         boolean hasRoleForTask = hasRoleForTask(username, processId, taskName);
 		boolean isActiveTask = isActiveTask(taskName, appInstanceId);
 		boolean isTheActivePersonForTaskOfInstance = isTheActivePersonForTaskOfInstance(username, taskName, appInstanceId);
-		return hasRoleForTask && isActiveTask && isTheActivePersonForTaskOfInstance;
+		return !isInstanceCompleted && hasRoleForTask && isActiveTask && isTheActivePersonForTaskOfInstance;
     }
 
     // Process Definition concern
