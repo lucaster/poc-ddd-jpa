@@ -25,7 +25,7 @@ class StateMachineSimpleIntegration {
 	final String processInstanceId;
 	final String processDefinitionId;
 	final String activeStateName;
-	final String activeStateFullyQualifiedName; // FQ così è già univoco e quando passeremo a data-driven potremo sostituirlo col guid o tener la natural key
+	final String activeStateFullyQualifiedName; // FQ così è già univoco e quando passeremo a data-driven potremo sostituirlo col guid e tenere i nomi degli stati semplici
 	protected Long versionForOptimisticLocking;
 	public StateMachineSimpleIntegration(String appInstanceId, String processInstanceId, String processDefinitionId, String activeStateName) {
 		this.appInstanceId = appInstanceId;

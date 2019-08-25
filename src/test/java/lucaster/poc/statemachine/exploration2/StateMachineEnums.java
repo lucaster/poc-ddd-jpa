@@ -5,9 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Enum values depend on project
+ * Enum values will depend on project
  */
-
 enum StateMachineDefinitions implements StateMachineDefinition, ProcessDefinition {
 
     EXAMPLE_SM_PROCESS("EXAMPLE_SM_PROCESS", Utils.<ExampleSmProcessTransitions>toSet(

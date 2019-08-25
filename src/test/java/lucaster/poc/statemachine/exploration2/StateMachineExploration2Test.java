@@ -26,7 +26,7 @@ public class StateMachineExploration2Test {
 		integrationRepository = new TestSimpleIntegrationRepository();
 		processDefinitionRepository = new EnumDrivenProcessDefinitionRepository();
 		procIntegrQuery = new UsherProcessIntegrationQueryImpl(integrationRepository);
-		procTopoQuery = new ModelDrivenUsherProcessTopologyQuery(processDefinitionRepository);
+		procTopoQuery = new UsherProcessTopologyQueryImpl(processDefinitionRepository);
 		roleQuery = new UsherRoleQueryImpl(processRoleRepository);
 		usher = new TestUsherImpl(procIntegrQuery, procTopoQuery, roleQuery);
 
