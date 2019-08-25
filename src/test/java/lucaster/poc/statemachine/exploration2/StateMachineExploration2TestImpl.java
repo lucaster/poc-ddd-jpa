@@ -6,6 +6,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Implementation of these must be redone for the project
+ */
+
 class TestIntegrationRepositoryImpl implements IntegrationRepository {
 	private static final Set<AppProcInst> procInstRepo;
 	static {
