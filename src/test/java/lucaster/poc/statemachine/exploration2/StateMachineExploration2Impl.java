@@ -2,7 +2,7 @@ package lucaster.poc.statemachine.exploration2;
 
 class EnumDrivenProcessDefinitionRepository implements ProcessDefinitionRepository {
 	@Override public ProcessDefinition findProcessDefinition(String processId) {
-		return StateMachineDefinitions.valueOf(processId);
+		return StateMachineProcessDefinition.valueOf(processId);
 	}
 }
 

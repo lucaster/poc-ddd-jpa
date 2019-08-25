@@ -7,18 +7,17 @@ class StateMachineInstance implements ProcessInstance {
 	private final String id;
 
 	// Enum -> PROCESS_DEFINITION_ID := 'EXAMPLE_SM_PROCESS' enum name as id is ok for process definition
-    private final StateMachineDefinitions pd;
+    private final StateMachineProcessDefinition pd;
 
     // Enum -> STATE_ID := 'STATE1' in data-driven il nome enum non sarà univoco tra tutti gli stati di tutte le sm
     // interface
     private StateMachineState activeState;
 
-    StateMachineInstance(StateMachineDefinitions pd) {
-        this.pd = pd;
-        id = UUID.randomUUID().toString();
+    StateMachineInstance(StateMachineProcessDefinition pd) {
+    	this(UUID.randomUUID().toString(), pd);
     }
 
-    StateMachineInstance(String id, StateMachineDefinitions pd) {
+    StateMachineInstance(String id, StateMachineProcessDefinition pd) {
     	this.pd = pd;
         this.id = id;
     }

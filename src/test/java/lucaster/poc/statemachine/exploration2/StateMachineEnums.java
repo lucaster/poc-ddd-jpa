@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Enum values will depend on project
  */
-enum StateMachineDefinitions implements StateMachineDefinition, ProcessDefinition {
+enum StateMachineProcessDefinition implements StateMachineDefinition, ProcessDefinition {
 
     EXAMPLE_SM_PROCESS("EXAMPLE_SM_PROCESS", Utils.<ExampleSmProcessTransitions>toSet(
     	ExampleSmProcessTransitions.TASK1, 
@@ -18,7 +18,7 @@ enum StateMachineDefinitions implements StateMachineDefinition, ProcessDefinitio
     private final Iterable<ExampleSmProcessTransitions> tasks;
 
     // TODO: topology checks
-    StateMachineDefinitions(String processId, Iterable<ExampleSmProcessTransitions> tasks) {
+    StateMachineProcessDefinition(String processId, Iterable<ExampleSmProcessTransitions> tasks) {
     	this.processId = processId;
         this.tasks = tasks;
     }
@@ -73,7 +73,7 @@ enum ExampleSmProcessStates implements StateMachineState {
 	}
 	// NaturalId, also good for Id
 	@Override public String getFullyQualifiedName() {
-		return Utils.makeFullyQualifiedStateName(StateMachineDefinitions.EXAMPLE_SM_PROCESS.getProcessDefinitionId(), getName());
+		return Utils.makeFullyQualifiedStateName(StateMachineProcessDefinition.EXAMPLE_SM_PROCESS.getProcessDefinitionId(), getName());
 	}
 }
 enum ExampleSmProcessRoles implements ProcessRole {

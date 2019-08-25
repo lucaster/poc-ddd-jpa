@@ -17,7 +17,7 @@ class TestDataDrivenIntegrationRepository implements IntegrationProcessInstanceR
 	private static final Set<StateMachineDataDrivenIntegration> procInstRepo;
 	static {
 		procInstRepo = new HashSet<>();
-	    StateMachineDefinitions pd = StateMachineDefinitions.EXAMPLE_SM_PROCESS;
+	    StateMachineProcessDefinition pd = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS;
 		StateMachineInstance pi = new StateMachineInstance(pd);
 	    pi.setActiveState(ExampleSmProcessStates.STATE1);
 	    String appInstanceId = "proposalId123";
@@ -42,7 +42,7 @@ class TestSimpleIntegrationRepository implements IntegrationProcessInstanceRepos
 	static {
 		repo = new HashSet<>();
 		String appInstanceId = "proposalId123";
-		StateMachineDefinitions pd = StateMachineDefinitions.EXAMPLE_SM_PROCESS;
+		StateMachineProcessDefinition pd = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS;
 		StateMachineInstance pi = new StateMachineInstance(pd);
         repo.add(
         	new StateMachineSimpleIntegration(
@@ -56,7 +56,7 @@ class TestSimpleIntegrationRepository implements IntegrationProcessInstanceRepos
 	@Override public ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId) {
 		for (StateMachineSimpleIntegration api : repo) {
             if (appInstanceId.equals(api.appInstanceId)) {
-            	StateMachineDefinitions pd = StateMachineDefinitions.valueOf(api.processDefinitionId);
+            	StateMachineProcessDefinition pd = StateMachineProcessDefinition.valueOf(api.processDefinitionId);
             	StateMachineInstance instance = new StateMachineInstance(api.processInstanceId, pd);
             	StateMachineState activeState = findStateMachineState(pd, api.activeStateName);
                 instance.setActiveState(activeState);
@@ -65,7 +65,7 @@ class TestSimpleIntegrationRepository implements IntegrationProcessInstanceRepos
         }
         return null;
 	}
-	private StateMachineState findStateMachineState(StateMachineDefinitions pd, String activeStateName) {
+	private StateMachineState findStateMachineState(StateMachineProcessDefinition pd, String activeStateName) {
 		Set<StateMachineState> states = pd.getStates();
 		for(StateMachineState state : states) {
 			if (state.getName().equals(activeStateName)) {
