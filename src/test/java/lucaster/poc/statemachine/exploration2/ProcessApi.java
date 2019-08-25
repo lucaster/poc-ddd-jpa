@@ -18,3 +18,15 @@ interface ProcessInstance {
 	ProcessDefinition getProcessDefinition();
 	Iterable<Task> getActiveTasks();
 }
+
+interface ProcessDefinitionRepository {
+	ProcessDefinition findProcessDefinition(String processId);
+}
+
+interface ProcessRoleRepository {
+    /**
+     * Username -> Bank Profiles
+     * BankProfile -> Roles
+     */
+    Iterable<ProcessRole> findRoles(String username);
+}

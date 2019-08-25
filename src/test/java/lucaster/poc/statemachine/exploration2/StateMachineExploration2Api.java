@@ -21,7 +21,7 @@ abstract class AbstractUsher implements Usher {
     // Template method
     @Override
     final public boolean canExecute(String username, String taskName, String appInstanceId) {
-        ProcessInstance pi = procIntegrQuery.findProcessInstance(appInstanceId);
+        ProcessInstance pi = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
         ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
         String processId = pd.getProcessDefinitionId();
         boolean hasRoleForTask = hasRoleForTask(username, processId, taskName);
@@ -41,7 +41,7 @@ abstract class AbstractUsher implements Usher {
 
     // Process Instance concern
     final boolean isActiveTask(String taskName, String appInstanceId) {
-        ProcessInstance pi = procIntegrQuery.findProcessInstance(appInstanceId);
+        ProcessInstance pi = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
         ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
         Task task = procTopoQuery.findTask(pd, taskName);
         Iterable<Task> activeTasks = procTopoQuery.getActiveTasks(pi);
@@ -49,7 +49,8 @@ abstract class AbstractUsher implements Usher {
     }
 
     /**
-     * SM does not know single users, so this becomes an application concern.
+     * This implementation is application-specific.<br />
+     * SM does not know single users, so this becomes an application concern.<br />
      * BPMN might know for example the process instance owner user by means of process variables.
      */
     abstract boolean isTheActivePersonForTaskOfInstance(String username, String taskName, String appInstanceId);
@@ -65,7 +66,7 @@ interface UsherRoleQuery {
 
 // A repository of Process topology objects
 interface UsherProcessTopologyQuery {
-    ProcessDefinition findProcessDefinition(String processId);
+    ProcessDefinition findProcessDefinition(String processDefinitionId);
     Task findTask(ProcessDefinition pd, String taskName);
     Iterable<ProcessRole> getAllowedRolesOfTask(Task task);
     ProcessDefinition findProcessDefinition(ProcessInstance pi);
@@ -74,13 +75,17 @@ interface UsherProcessTopologyQuery {
 }
 
 interface UsherProcessIntegrationQuery {
-    ProcessInstance findProcessInstance(String appInstanceId);
+    ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId);
 }
 
 final class ModelDrivenUsherProcessTopologyQuery implements UsherProcessTopologyQuery {
+	private final ProcessDefinitionRepository processDefinitionRepository;
+	ModelDrivenUsherProcessTopologyQuery(ProcessDefinitionRepository processDefinitionRepository) {
+		this.processDefinitionRepository = processDefinitionRepository;
+	}
     @Override
-    public ProcessDefinition findProcessDefinition(String processId) {
-        return StateMachineDefinitions.valueOf(processId);
+    public ProcessDefinition findProcessDefinition(String processDefinitionId) {
+    	return processDefinitionRepository.findProcessDefinition(processDefinitionId);
     }
     @Override
     public Task findTask(ProcessDefinition pd, String taskName) {

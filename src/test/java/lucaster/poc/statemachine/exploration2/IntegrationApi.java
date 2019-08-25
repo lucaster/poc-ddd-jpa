@@ -1,5 +1,9 @@
 package lucaster.poc.statemachine.exploration2;
 
+interface IntegrationRepository {
+	ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId);
+}
+
 /**
  * Links Process Instance and app-specific data
  * @author Luca Cavagnoli
