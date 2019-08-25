@@ -33,13 +33,19 @@ class StateMachineSimpleIntegration {
 		this.processInstanceId = processInstanceId;
 		this.processDefinitionId = processDefinitionId;
 		this.activeStateName = activeStateName;
-		this.activeStateFullyQualifiedName = Utils.makeFullyQualifiedStateName(processDefinitionId, activeStateName);
+		this.setActiveStateFullyQualifiedName(Utils.makeFullyQualifiedStateName(processDefinitionId, activeStateName));
 	}
 	public void setActiveState(StateMachineState activeState) {
 		this.activeStateName = activeState.getName();
-		this.activeStateFullyQualifiedName = Utils.makeFullyQualifiedStateName(processDefinitionId, activeStateName);
+		this.setActiveStateFullyQualifiedName(Utils.makeFullyQualifiedStateName(processDefinitionId, activeStateName));
 	}
 	String getActiveStateName() {
 		return activeStateName;
+	}
+	public String getActiveStateFullyQualifiedName() {
+		return activeStateFullyQualifiedName;
+	}
+	private void setActiveStateFullyQualifiedName(String activeStateFullyQualifiedName) {
+		this.activeStateFullyQualifiedName = activeStateFullyQualifiedName;
 	}
 }
