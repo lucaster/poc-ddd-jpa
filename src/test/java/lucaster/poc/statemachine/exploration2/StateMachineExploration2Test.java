@@ -39,8 +39,8 @@ public class StateMachineExploration2Test {
 
 		username1 = "EE53414";
 		username2 = "EE37987";
-		task1Name = ExampleSmProcessTransitions.TASK1.getTaskName();
-		task2Name = ExampleSmProcessTransitions.TASK2.getTaskName();
+		task1Name = ExampleSmTransitions.TASK1.getTaskName();
+		task2Name = ExampleSmTransitions.TASK2.getTaskName();
 		appInstanceId = "proposalId123";
 	}
 
@@ -88,14 +88,14 @@ public class StateMachineExploration2Test {
 		ProcessInstance processInstance = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
 		StateMachineInstance stateMachineInstance = (StateMachineInstance) processInstance;
 		StateMachineState activeState = stateMachineInstance.getActiveState();
-		assertEquals(ExampleSmProcessStates.STATE2, activeState);
+		assertEquals(ExampleSmStates.STATE2, activeState);
 		
 		executor.execute(username2, appInstanceId, task2Name);
 		
 		ProcessInstance processInstance2 = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
 		StateMachineInstance stateMachineInstance2 = (StateMachineInstance) processInstance2;
 		StateMachineState activeState2 = stateMachineInstance2.getActiveState();
-		assertEquals(ExampleSmProcessStates.STATE3, activeState2);
+		assertEquals(ExampleSmStates.STATE3, activeState2);
 		
 		assertFalse(usher.canExecute(username1, task1Name, appInstanceId));
 		assertFalse(usher.canExecute(username1, task2Name, appInstanceId));

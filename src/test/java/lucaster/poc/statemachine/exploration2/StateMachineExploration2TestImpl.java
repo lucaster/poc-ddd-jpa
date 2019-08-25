@@ -18,7 +18,7 @@ class TestDataDrivenStateMachineIntegrationRepository implements ProcessIntegrat
 	{
 		repo = new HashSet<>();
 	    StateMachineProcessDefinition pd = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS;
-		StateMachineInstance pi = new StateMachineInstance(pd, ExampleSmProcessStates.STATE1);
+		StateMachineInstance pi = new StateMachineInstance(pd, ExampleSmStates.STATE1);
 	    String appInstanceId = "proposalId123";
 	    StateMachineDataDrivenIntegration appProcInst = new StateMachineDataDrivenIntegration(pi, appInstanceId);
 	    repo.add(appProcInst);
@@ -58,7 +58,7 @@ class TestSimpleStateMachineIntegrationRepository implements ProcessIntegrationR
         			appInstanceId, 
         			pi.getProcessInstanceId(), 
         			pd.getProcessDefinitionId(), 
-        			ExampleSmProcessStates.STATE1.getName()
+        			ExampleSmStates.STATE1.getName()
         	)
         );
 	}

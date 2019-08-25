@@ -19,7 +19,7 @@ class StateMachineInstance implements ProcessInstance {
     	this(makeId(), pd);
     }
 
-    StateMachineInstance(StateMachineProcessDefinition pd, ExampleSmProcessStates activeState) {
+    StateMachineInstance(StateMachineProcessDefinition pd, ExampleSmStates activeState) {
 		this(makeId(), pd, activeState);
 	}
 

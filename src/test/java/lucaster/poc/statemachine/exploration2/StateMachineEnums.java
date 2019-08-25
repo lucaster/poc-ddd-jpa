@@ -9,16 +9,16 @@ import java.util.Set;
  */
 enum StateMachineProcessDefinition implements StateMachineDefinition, ProcessDefinition {
 
-    EXAMPLE_SM_PROCESS("EXAMPLE_SM_PROCESS", Utils.<ExampleSmProcessTransitions>toSet(
-    	ExampleSmProcessTransitions.TASK1, 
-    	ExampleSmProcessTransitions.TASK2
+    EXAMPLE_SM_PROCESS("EXAMPLE_SM_PROCESS", Utils.<ExampleSmTransitions>toSet(
+    	ExampleSmTransitions.TASK1, 
+    	ExampleSmTransitions.TASK2
     ));
 
 	private final String processId;
-    private final Iterable<ExampleSmProcessTransitions> tasks;
+    private final Iterable<ExampleSmTransitions> tasks;
 
     // TODO: topology checks
-    StateMachineProcessDefinition(String processId, Iterable<ExampleSmProcessTransitions> tasks) {
+    StateMachineProcessDefinition(String processId, Iterable<ExampleSmTransitions> tasks) {
     	this.processId = processId;
         this.tasks = tasks;
     }
@@ -29,7 +29,7 @@ enum StateMachineProcessDefinition implements StateMachineDefinition, ProcessDef
 
     @Override public Iterable<Task> getOutgoingTransitions(StateMachineState state) {
     	Set<Task> set = new HashSet<>();
-    	for (ExampleSmProcessTransitions t : tasks) {
+    	for (ExampleSmTransitions t : tasks) {
     		if (state.equals(t.getFrom())) {
     			set.add(t);
     		}
@@ -55,13 +55,13 @@ enum StateMachineProcessDefinition implements StateMachineDefinition, ProcessDef
         return null;
     }
 }
-enum ExampleSmProcessStates implements StateMachineState {
+enum ExampleSmStates implements StateMachineState {
 	STATE1("STATE1", false),
 	STATE2("STATE2", false),
 	STATE3("STATE3", true);
 	private final String name;
 	private final boolean isFinal;
-	ExampleSmProcessStates(String name, boolean isFinal) {
+	ExampleSmStates(String name, boolean isFinal) {
 		this.name = name;
 		this.isFinal = isFinal;
 	}
@@ -80,22 +80,22 @@ enum ExampleSmProcessRoles implements ProcessRole {
     ROLE1,
     ROLE2;
 }
-enum ExampleSmProcessTransitions implements Task, StateMachineTransition {
+enum ExampleSmTransitions implements Task, StateMachineTransition {
     TASK1(	"TASK1",
-    		ExampleSmProcessStates.STATE1, 
-    		ExampleSmProcessStates.STATE2, 
+    		ExampleSmStates.STATE1, 
+    		ExampleSmStates.STATE2, 
     		Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1)
     ), 
     TASK2(	"TASK2",
-    		ExampleSmProcessStates.STATE2, 
-    		ExampleSmProcessStates.STATE3, 
+    		ExampleSmStates.STATE2, 
+    		ExampleSmStates.STATE3, 
     		Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2)
     );
     private final Iterable<ProcessRole> roles;
     private final StateMachineState from;
     private final StateMachineState to;
     private final String name;
-    ExampleSmProcessTransitions(String name, StateMachineState from, StateMachineState to, Iterable<ProcessRole> roles) {
+    ExampleSmTransitions(String name, StateMachineState from, StateMachineState to, Iterable<ProcessRole> roles) {
     	this.name = name;
     	this.from = from;
     	this.to = to;
