@@ -14,8 +14,12 @@ class StateMachineInstance implements ProcessInstance {
     private StateMachineState activeState;
 
     StateMachineInstance(StateMachineProcessDefinition pd) {
-    	this(UUID.randomUUID().toString(), pd);
+    	this(makeId(), pd);
     }
+
+    StateMachineInstance(StateMachineProcessDefinition pd, ExampleSmProcessStates activeState) {
+		this(makeId(), pd, activeState);
+	}
 
     StateMachineInstance(String id, StateMachineProcessDefinition pd) {
     	this(id, pd, null);
@@ -26,8 +30,8 @@ class StateMachineInstance implements ProcessInstance {
         this.id = id;
         this.activeState = activeState;
     }
-    
-    @Override public String getProcessInstanceId() {
+
+	@Override public String getProcessInstanceId() {
     	return id;
     }
 
@@ -53,4 +57,8 @@ class StateMachineInstance implements ProcessInstance {
     void setActiveState(StateMachineState state) {
         this.activeState = state;
     }
+
+	private static String makeId() {
+		return UUID.randomUUID().toString();
+	}
 }

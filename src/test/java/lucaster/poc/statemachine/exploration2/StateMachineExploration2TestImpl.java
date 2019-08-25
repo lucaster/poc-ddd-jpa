@@ -18,8 +18,7 @@ class TestDataDrivenIntegrationRepository implements IntegrationProcessInstanceR
 	static {
 		procInstRepo = new HashSet<>();
 	    StateMachineProcessDefinition pd = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS;
-		StateMachineInstance pi = new StateMachineInstance(pd);
-	    pi.setActiveState(ExampleSmProcessStates.STATE1);
+		StateMachineInstance pi = new StateMachineInstance(pd, ExampleSmProcessStates.STATE1);
 	    String appInstanceId = "proposalId123";
 	    StateMachineDataDrivenIntegration appProcInst = new StateMachineDataDrivenIntegration(pi, appInstanceId);
 	    procInstRepo.add(appProcInst);
