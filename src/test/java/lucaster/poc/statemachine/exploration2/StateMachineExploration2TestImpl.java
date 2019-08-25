@@ -10,19 +10,22 @@ import java.util.Set;
  * Implementation of these must be redone for the project
  */
 
-class TestIntegrationRepositoryImpl implements IntegrationRepository {
-	private static final Set<AppProcInst> procInstRepo;
+/**
+ * For data-driven.
+ */
+class TestDataDrivenIntegrationRepository implements IntegrationRepository {
+	private static final Set<StateMachineDataDrivenIntegration> procInstRepo;
 	static {
 		procInstRepo = new HashSet<>();
 	    StateMachineDefinitions pd = StateMachineDefinitions.EXAMPLE_SM_PROCESS;
 		StateMachineInstance pi = new StateMachineInstance(pd);
 	    pi.setActiveState(ExampleSmProcessStates.STATE1);
 	    String appInstanceId = "proposalId123";
-	    AppProcInst appProcInst = new AppProcInst(pi, appInstanceId);
+	    StateMachineDataDrivenIntegration appProcInst = new StateMachineDataDrivenIntegration(pi, appInstanceId);
 	    procInstRepo.add(appProcInst);
 	}
 	@Override public ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId) {
-		for (AppProcInst api : procInstRepo) {
+		for (StateMachineDataDrivenIntegration api : procInstRepo) {
             if (appInstanceId.equals(api.appInstanceId)) {
                 return api.pi;
             }
@@ -31,7 +34,10 @@ class TestIntegrationRepositoryImpl implements IntegrationRepository {
 	}
 }
 
-class TestIntegrationRepositoryImplSimple implements IntegrationRepository {
+/**
+ * For not data-driven
+ */
+class TestSimpleIntegrationRepository implements IntegrationRepository {
 	private static final Set<StateMachineSimpleIntegration> repo;
 	static {
 		repo = new HashSet<>();

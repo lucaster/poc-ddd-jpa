@@ -23,7 +23,7 @@ public class StateMachineExploration2Test {
 	@Before
 	public void setup() {
 		processRoleRepository = new TestProcessRoleRepository();
-		integrationRepository = new TestIntegrationRepositoryImplSimple();
+		integrationRepository = new TestSimpleIntegrationRepository();
 		processDefinitionRepository = new EnumDrivenProcessDefinitionRepository();
 		procIntegrQuery = new UsherProcessIntegrationQueryImpl(integrationRepository);
 		procTopoQuery = new ModelDrivenUsherProcessTopologyQuery(processDefinitionRepository);

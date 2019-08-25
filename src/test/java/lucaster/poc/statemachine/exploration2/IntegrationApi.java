@@ -5,28 +5,27 @@ interface IntegrationRepository {
 }
 
 /**
- * Links Process Instance and app-specific data
- * @author Luca Cavagnoli
- *
+ * For when processes will be data-driven.
  */
-class AppProcInst {
-	// PROCESS_INSTANCE_ID
+class StateMachineDataDrivenIntegration {
     final ProcessInstance pi;
-    // APP_INSTANCE_ID
     final String appInstanceId;
     protected Long versionForOptimisticLocking;
-    AppProcInst(ProcessInstance pi, String appInstanceId) {
+    StateMachineDataDrivenIntegration(ProcessInstance pi, String appInstanceId) {
         this.pi = pi;
         this.appInstanceId = appInstanceId;
     }
 }
 
+/**
+ * For without data-driven
+ */
 class StateMachineSimpleIntegration {
 	final String appInstanceId;
 	final String processInstanceId;
 	final String processDefinitionId;
 	final String activeStateName;
-	final String activeStateFullyQualifiedName; // FQ così è già univoco per quando passeremo a data-driven
+	final String activeStateFullyQualifiedName; // FQ così è già univoco e quando passeremo a data-driven potremo sostituirlo col guid o tener la natural key
 	protected Long versionForOptimisticLocking;
 	public StateMachineSimpleIntegration(String appInstanceId, String processInstanceId, String processDefinitionId, String activeStateName) {
 		this.appInstanceId = appInstanceId;

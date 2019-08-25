@@ -18,6 +18,7 @@ enum StateMachineDefinitions implements StateMachineDefinition, ProcessDefinitio
 	private final String processId;
     private final Iterable<ExampleSmProcessTransitions> tasks;
 
+    // TODO: topology checks
     StateMachineDefinitions(String processId, Iterable<ExampleSmProcessTransitions> tasks) {
     	this.processId = processId;
         this.tasks = tasks;
