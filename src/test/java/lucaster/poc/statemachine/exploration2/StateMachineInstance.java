@@ -18,8 +18,13 @@ class StateMachineInstance implements ProcessInstance {
     }
 
     StateMachineInstance(String id, StateMachineProcessDefinition pd) {
+    	this(id, pd, null);
+    }
+    
+    StateMachineInstance(String id, StateMachineProcessDefinition pd, StateMachineState activeState) {
     	this.pd = pd;
         this.id = id;
+        this.activeState = activeState;
     }
     
     @Override public String getProcessInstanceId() {
