@@ -14,6 +14,7 @@ interface ProcessInstance {
 	String getProcessInstanceId();
 	ProcessDefinition getProcessDefinition();
 	Iterable<Task> getActiveTasks();
+	void executeTask(Task task);
 }
 interface ProcessDefinitionRepository {
 	ProcessDefinition findProcessDefinition(String processId);
@@ -23,4 +24,12 @@ interface ProcessRoleRepository {
 	 * e.g.: Username -> Bank Profiles. Bank Profile -> Roles.
 	 */
     Iterable<ProcessRole> findRoles(String username);
+}
+interface ProcessTopologyQuery {
+	ProcessDefinition findProcessDefinition(String processDefinitionId);
+	Task findTask(ProcessDefinition pd, String taskName);
+	Iterable<ProcessRole> getAllowedRolesOfTask(Task task);
+	ProcessDefinition findProcessDefinition(ProcessInstance pi);
+	// If SM, active tasks are the current state's outgoing transitions. If BPMN, active tasks are the active tasks.
+	Iterable<Task> getActiveTasks(ProcessInstance pi);
 }

@@ -9,12 +9,14 @@ import org.junit.Test;
 public class StateMachineExploration2Test {
 
 	ProcessRoleRepository processRoleRepository;
-	IntegrationProcessInstanceRepository integrationRepository;
+	ProcessIntegrationRepository integrationRepository;
 	ProcessDefinitionRepository processDefinitionRepository;
 	UsherProcessIntegrationQuery procIntegrQuery;
-	UsherProcessTopologyQuery procTopoQuery;
+	ProcessTopologyQuery procTopoQuery;
 	UsherRoleQuery roleQuery;
 	Usher usher;
+	ExecutorQuery executorQuery;
+	Executor executor;
 
 	String username;
 	String taskName;
@@ -23,16 +25,27 @@ public class StateMachineExploration2Test {
 	@Before
 	public void setup() {
 		processRoleRepository = new TestProcessRoleRepository();
-		integrationRepository = new TestSimpleIntegrationRepository();
+		integrationRepository = new TestSimpleStateMachineIntegrationRepository();
 		processDefinitionRepository = new EnumDrivenProcessDefinitionRepository();
 		procIntegrQuery = new UsherProcessIntegrationQueryImpl(integrationRepository);
 		procTopoQuery = new UsherProcessTopologyQueryImpl(processDefinitionRepository);
 		roleQuery = new UsherRoleQueryImpl(processRoleRepository);
 		usher = new TestUsherImpl(procIntegrQuery, procTopoQuery, roleQuery);
+		executorQuery = new ExecutorQueryImpl(integrationRepository, procTopoQuery);
+		executor = new ExecutorImpl(executorQuery, integrationRepository);
 
 		username = "EE53414";
 		taskName = ExampleSmProcessTransitions.TASK1.getTaskName();
 		appInstanceId = "proposalId123";
+	}
+
+	@Test
+	public void execute() {
+		executor.execute(appInstanceId, taskName);
+		ProcessInstance processInstance = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
+		StateMachineInstance stateMachineInstance = (StateMachineInstance) processInstance;
+		StateMachineState activeState = stateMachineInstance.getActiveState();
+		assertEquals(ExampleSmProcessStates.STATE2, activeState);
 	}
 
 	@Test

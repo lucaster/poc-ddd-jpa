@@ -1,7 +1,8 @@
 package lucaster.poc.statemachine.exploration2;
 
-interface IntegrationProcessInstanceRepository {
+interface ProcessIntegrationRepository {
 	ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId);
+	void updateIntegrationInfo(ProcessInstance pi, String appInstanceId);
 }
 
 /**
@@ -24,8 +25,8 @@ class StateMachineSimpleIntegration {
 	final String appInstanceId;
 	final String processInstanceId;
 	final String processDefinitionId;
-	final String activeStateName;
-	final String activeStateFullyQualifiedName; // FQ così è già univoco e quando passeremo a data-driven potremo sostituirlo col guid e tenere i nomi degli stati semplici
+	private String activeStateName;
+	private String activeStateFullyQualifiedName; // FQ così è già univoco e quando passeremo a data-driven potremo sostituirlo col guid e tenere i nomi degli stati semplici
 	protected Long versionForOptimisticLocking;
 	public StateMachineSimpleIntegration(String appInstanceId, String processInstanceId, String processDefinitionId, String activeStateName) {
 		this.appInstanceId = appInstanceId;
@@ -33,5 +34,12 @@ class StateMachineSimpleIntegration {
 		this.processDefinitionId = processDefinitionId;
 		this.activeStateName = activeStateName;
 		this.activeStateFullyQualifiedName = Utils.makeFullyQualifiedStateName(processDefinitionId, activeStateName);
+	}
+	public void setActiveState(StateMachineState activeState) {
+		this.activeStateName = activeState.getName();
+		this.activeStateFullyQualifiedName = Utils.makeFullyQualifiedStateName(processDefinitionId, activeStateName);
+	}
+	String getActiveStateName() {
+		return activeStateName;
 	}
 }

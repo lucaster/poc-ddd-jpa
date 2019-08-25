@@ -7,11 +7,11 @@ interface Usher {
 abstract class AbstractUsher implements Usher {
 
     private final UsherProcessIntegrationQuery procIntegrQuery;
-    private final UsherProcessTopologyQuery procTopoQuery;
+    private final ProcessTopologyQuery procTopoQuery;
     private final UsherRoleQuery roleQuery;
 
     public AbstractUsher(   UsherProcessIntegrationQuery procIntegrQuery, 
-                            UsherProcessTopologyQuery procTopoQuery,
+                            ProcessTopologyQuery procTopoQuery,
                             UsherRoleQuery roleQuery) {
         this.procIntegrQuery = procIntegrQuery;
         this.procTopoQuery = procTopoQuery;
@@ -62,16 +62,6 @@ interface UsherRoleQuery {
      * BankProfile -> Roles
      */
     Iterable<ProcessRole> findRoles(String username);
-}
-
-// A repository of Process topology objects
-interface UsherProcessTopologyQuery {
-    ProcessDefinition findProcessDefinition(String processDefinitionId);
-    Task findTask(ProcessDefinition pd, String taskName);
-    Iterable<ProcessRole> getAllowedRolesOfTask(Task task);
-    ProcessDefinition findProcessDefinition(ProcessInstance pi);
-    // If SM, active tasks are the current state's outgoing transitions. If BPMN, active tasks are the active tasks.
-    Iterable<Task> getActiveTasks(ProcessInstance pi);
 }
 
 interface UsherProcessIntegrationQuery {

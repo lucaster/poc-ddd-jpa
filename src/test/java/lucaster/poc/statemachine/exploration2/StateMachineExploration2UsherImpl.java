@@ -16,7 +16,7 @@ class UsherRoleQueryImpl implements UsherRoleQuery {
     }
 }
 
-class UsherProcessTopologyQueryImpl implements UsherProcessTopologyQuery {
+class UsherProcessTopologyQueryImpl implements ProcessTopologyQuery {
 	private final ProcessDefinitionRepository processDefinitionRepository;
 	UsherProcessTopologyQueryImpl(ProcessDefinitionRepository processDefinitionRepository) {
 		this.processDefinitionRepository = processDefinitionRepository;
@@ -44,8 +44,8 @@ class UsherProcessTopologyQueryImpl implements UsherProcessTopologyQuery {
 }
 
 class UsherProcessIntegrationQueryImpl implements UsherProcessIntegrationQuery {
-    private final IntegrationProcessInstanceRepository integrationRepo;
-    public UsherProcessIntegrationQueryImpl(IntegrationProcessInstanceRepository integrationRepo) {
+    private final ProcessIntegrationRepository integrationRepo;
+    public UsherProcessIntegrationQueryImpl(ProcessIntegrationRepository integrationRepo) {
 		this.integrationRepo = integrationRepo;
 	}
     @Override public ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId) {

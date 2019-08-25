@@ -13,32 +13,42 @@ import java.util.Set;
 /**
  * For data-driven.
  */
-class TestDataDrivenIntegrationRepository implements IntegrationProcessInstanceRepository {
-	private static final Set<StateMachineDataDrivenIntegration> procInstRepo;
-	static {
-		procInstRepo = new HashSet<>();
+class TestDataDrivenStateMachineIntegrationRepository implements ProcessIntegrationRepository {
+	private final Set<StateMachineDataDrivenIntegration> repo;
+	{
+		repo = new HashSet<>();
 	    StateMachineProcessDefinition pd = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS;
 		StateMachineInstance pi = new StateMachineInstance(pd, ExampleSmProcessStates.STATE1);
 	    String appInstanceId = "proposalId123";
 	    StateMachineDataDrivenIntegration appProcInst = new StateMachineDataDrivenIntegration(pi, appInstanceId);
-	    procInstRepo.add(appProcInst);
+	    repo.add(appProcInst);
 	}
 	@Override public ProcessInstance findProcessInstanceByAppIntanceId(String appInstanceId) {
-		for (StateMachineDataDrivenIntegration api : procInstRepo) {
+		for (StateMachineDataDrivenIntegration api : repo) {
             if (appInstanceId.equals(api.appInstanceId)) {
                 return api.pi;
             }
         }
         return null;
 	}
+	@Override
+	public void updateIntegrationInfo(ProcessInstance pi, String appInstanceId) {
+		for (StateMachineDataDrivenIntegration api : repo) {
+            if (appInstanceId.equals(api.appInstanceId) && pi.equals(api.pi)) {
+            	StateMachineInstance incoming = (StateMachineInstance) pi;
+            	StateMachineInstance stored = (StateMachineInstance) api.pi;
+                stored.setActiveState(incoming.getActiveState());
+            }
+        }
+	}
 }
 
 /**
  * For not data-driven
  */
-class TestSimpleIntegrationRepository implements IntegrationProcessInstanceRepository {
-	private static final Set<StateMachineSimpleIntegration> repo;
-	static {
+class TestSimpleStateMachineIntegrationRepository implements ProcessIntegrationRepository {
+	private final Set<StateMachineSimpleIntegration> repo;
+	{
 		repo = new HashSet<>();
 		String appInstanceId = "proposalId123";
 		StateMachineProcessDefinition pd = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS;
@@ -56,7 +66,7 @@ class TestSimpleIntegrationRepository implements IntegrationProcessInstanceRepos
 		for (StateMachineSimpleIntegration api : repo) {
             if (appInstanceId.equals(api.appInstanceId)) {
             	StateMachineProcessDefinition pd = StateMachineProcessDefinition.valueOf(api.processDefinitionId);
-            	StateMachineState activeState = findStateMachineState(pd, api.activeStateName);
+            	StateMachineState activeState = findStateMachineState(pd, api.getActiveStateName());
             	StateMachineInstance instance = new StateMachineInstance(api.processInstanceId, pd, activeState);
                 return instance;
             }
@@ -72,11 +82,21 @@ class TestSimpleIntegrationRepository implements IntegrationProcessInstanceRepos
 		}
 		return null;
 	}
+	@Override
+	public void updateIntegrationInfo(ProcessInstance pi, String appInstanceId) {
+		// TODO Auto-generated method stub
+		for (StateMachineSimpleIntegration api : repo) {
+			if (appInstanceId.equals(api.appInstanceId)) {
+				StateMachineInstance smi = (StateMachineInstance) pi;
+				api.setActiveState(smi.getActiveState());
+			}
+		}
+	}
 }
 
 class TestProcessRoleRepository implements ProcessRoleRepository {
-	private static final Map<String, Iterable<ProcessRole>> repo;
-	static {
+	private final Map<String, Iterable<ProcessRole>> repo;
+	{
 		repo = new HashMap<>();
 		repo.put("EE53414", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1));
 		repo.put("EE37987", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2));
@@ -92,7 +112,7 @@ class TestProcessRoleRepository implements ProcessRoleRepository {
 class TestUsherImpl extends AbstractUsher {
     public TestUsherImpl(
     	UsherProcessIntegrationQuery procIntegrQuery, 
-    	UsherProcessTopologyQuery procTopoQuery,
+    	ProcessTopologyQuery procTopoQuery,
     	UsherRoleQuery roleQuery
     ) {
         super(procIntegrQuery, procTopoQuery, roleQuery);

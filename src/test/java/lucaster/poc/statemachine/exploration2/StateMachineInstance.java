@@ -2,6 +2,8 @@ package lucaster.poc.statemachine.exploration2;
 
 import java.util.UUID;
 
+import javax.resource.spi.IllegalStateException;
+
 class StateMachineInstance implements ProcessInstance {
 	
 	private final String id;
@@ -49,7 +51,7 @@ class StateMachineInstance implements ProcessInstance {
     	return activeState.getFullyQualifiedName();
     }
     
-    private StateMachineState getActiveState() {
+    StateMachineState getActiveState() {
         return activeState;
     }
 
@@ -60,5 +62,23 @@ class StateMachineInstance implements ProcessInstance {
 
 	private static String makeId() {
 		return UUID.randomUUID().toString();
+	}
+
+	@Override
+	public void executeTask(Task task) {
+		StateMachineTransition transition = (StateMachineTransition) task;
+		try {
+			executeTransition(transition);
+		} catch (IllegalStateException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	void executeTransition(StateMachineTransition transition) throws IllegalStateException {
+		StateMachineState activeState = getActiveState();
+		if (!activeState.equals(transition.getFrom())) {
+			throw new IllegalStateException();
+		}
+		setActiveState(transition.getTo());
 	}
 }
