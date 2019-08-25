@@ -40,12 +40,17 @@ public class StateMachineExploration2Test {
 	}
 
 	@Test
-	public void execute() {
-		executor.execute(appInstanceId, taskName);
-		ProcessInstance processInstance = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
-		StateMachineInstance stateMachineInstance = (StateMachineInstance) processInstance;
-		StateMachineState activeState = stateMachineInstance.getActiveState();
-		assertEquals(ExampleSmProcessStates.STATE2, activeState);
+	public void findTask() {
+		ProcessInstance pi = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
+		ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
+		String processId = pd.getProcessDefinitionId();
+		ProcessDefinition pd2 = procTopoQuery.findProcessDefinition(processId);
+		Task task = procTopoQuery.findTask(pd, taskName);
+		Task task2 = procTopoQuery.findTask(pd2, taskName);
+
+		assertEquals(pd, pd2);
+		assertEquals(task, task2);
+		assertEquals(taskName, task2.getTaskName());
 	}
 
 	@Test
@@ -64,23 +69,17 @@ public class StateMachineExploration2Test {
 	}
 
 	@Test
-	public void findTask() {
-		ProcessInstance pi = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
-		ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
-		String processId = pd.getProcessDefinitionId();
-		ProcessDefinition pd2 = procTopoQuery.findProcessDefinition(processId);
-		Task task = procTopoQuery.findTask(pd, taskName);
-		Task task2 = procTopoQuery.findTask(pd2, taskName);
-
-		assertEquals(pd, pd2);
-		assertEquals(task, task2);
-		assertEquals(taskName, task2.getTaskName());
+	public void canExecute() {
+		boolean canExecute = usher.canExecute(username, taskName, appInstanceId);
+		assertTrue(canExecute);
 	}
 
 	@Test
-	public void explore() {
-
-		boolean can = usher.canExecute(username, taskName, appInstanceId);
-		assertTrue(can);
+	public void execute() {
+		executor.execute(appInstanceId, taskName);
+		ProcessInstance processInstance = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
+		StateMachineInstance stateMachineInstance = (StateMachineInstance) processInstance;
+		StateMachineState activeState = stateMachineInstance.getActiveState();
+		assertEquals(ExampleSmProcessStates.STATE2, activeState);
 	}
 }
