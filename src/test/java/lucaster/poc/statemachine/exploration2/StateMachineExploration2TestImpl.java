@@ -59,14 +59,8 @@ class TestSimpleStateMachineIntegrationRepository implements ProcessIntegrationR
 		this.topoQuery = topoQuery;
 	}
 	void add(String appInstanceId, String processInstanceId, String processDefinitionId, String activeStateName) {
-		repo.add(
-        	new StateMachineSimpleIntegration(
-        			appInstanceId, 
-        			processInstanceId, 
-        			processDefinitionId, 
-        			activeStateName
-        	)
-        );
+		StateMachineSimpleIntegration smi = new StateMachineSimpleIntegration(appInstanceId, processInstanceId, processDefinitionId, activeStateName);
+		repo.add(smi);
 	}
 	@Override public ProcessInstance findProcessInstanceByAppInstanceId(String appInstanceId) {
 		for (StateMachineSimpleIntegration api : repo) {

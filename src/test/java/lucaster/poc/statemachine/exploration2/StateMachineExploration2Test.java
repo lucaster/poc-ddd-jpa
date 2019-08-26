@@ -30,18 +30,25 @@ public class StateMachineExploration2Test {
 
 	@Before
 	public void setup() {
+
+		username1 = "EE53414";
+		username2 = "EE37987";
+		appInstanceId = "proposalId123";
+		StateMachineProcessDefinition smpd = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS;
+		String processInstanceId = new StateMachineInstance(smpd).getProcessInstanceId();
+		String activeStateName = ExampleSmStates.STATE1.getName();
+		task1Name = ExampleSmTransitions.TASK1.getTaskName();
+		task2Name = ExampleSmTransitions.TASK2.getTaskName();
+
 		processRoleRepository = new TestProcessRoleRepository();
-		((TestProcessRoleRepository) processRoleRepository).add("EE53414", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1));
-		((TestProcessRoleRepository) processRoleRepository).add("EE37987", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2));
+		((TestProcessRoleRepository) processRoleRepository).add(username1, Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1));
+		((TestProcessRoleRepository) processRoleRepository).add(username2, Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2));
 		
 		processDefinitionRepository = new EnumDrivenProcessDefinitionRepository();
 		procTopoQuery = new UsherProcessTopologyQueryImpl(processDefinitionRepository);
 		
 		integrationRepository = new TestSimpleStateMachineIntegrationRepository(procTopoQuery);
-		appInstanceId = "proposalId123";
-        String processInstanceId = new StateMachineInstance(StateMachineProcessDefinition.EXAMPLE_SM_PROCESS).getProcessInstanceId();
-        processDefinitionId = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS.getProcessDefinitionId();
-		String activeStateName = ExampleSmStates.STATE1.getName();
+        processDefinitionId = smpd.getProcessDefinitionId();
 		((TestSimpleStateMachineIntegrationRepository) integrationRepository).add(appInstanceId, processInstanceId, processDefinitionId, activeStateName);
 		
 		procIntegrQuery = new UsherProcessIntegrationQueryImpl(integrationRepository);
@@ -51,10 +58,6 @@ public class StateMachineExploration2Test {
 		executor = new ExecutorImpl(executorQuery, integrationRepository, usher);
 		creator = new CreatorImpl(procTopoQuery, integrationRepository);
 
-		username1 = "EE53414";
-		username2 = "EE37987";
-		task1Name = ExampleSmTransitions.TASK1.getTaskName();
-		task2Name = ExampleSmTransitions.TASK2.getTaskName();
 	}
 
 	@Test
