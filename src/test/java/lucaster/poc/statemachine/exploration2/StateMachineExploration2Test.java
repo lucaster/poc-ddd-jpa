@@ -33,12 +33,12 @@ public class StateMachineExploration2Test {
 
 		username1 = "EE53414";
 		username2 = "EE37987";
-		appInstanceId = "proposalId123";
-		StateMachineProcessDefinition smpd = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS;
-		String processInstanceId = new StateMachineInstance(smpd).getProcessInstanceId();
-		String activeStateName = ExampleSmStates.STATE1.getName();
 		task1Name = ExampleSmTransitions.TASK1.getTaskName();
 		task2Name = ExampleSmTransitions.TASK2.getTaskName();
+		appInstanceId = "proposalId123";
+		processDefinitionId = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS.getProcessDefinitionId();
+		String processInstanceId = "processInstanceId123";
+		String activeStateName = ExampleSmStates.STATE1.getName();
 
 		processRoleRepository = new TestProcessRoleRepository();
 		((TestProcessRoleRepository) processRoleRepository).add(username1, Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1));
@@ -48,7 +48,6 @@ public class StateMachineExploration2Test {
 		procTopoQuery = new UsherProcessTopologyQueryImpl(processDefinitionRepository);
 		
 		integrationRepository = new TestSimpleStateMachineIntegrationRepository(procTopoQuery);
-        processDefinitionId = smpd.getProcessDefinitionId();
 		((TestSimpleStateMachineIntegrationRepository) integrationRepository).add(appInstanceId, processInstanceId, processDefinitionId, activeStateName);
 		
 		procIntegrQuery = new UsherProcessIntegrationQueryImpl(integrationRepository);
