@@ -74,6 +74,7 @@ enum ExampleSmStates implements StateMachineState {
 	}
 	@Override public boolean isInitial() {
 		return isInitial;
+
 	}
 	@Override public boolean isFinal() {
 		return isFinal;
@@ -91,28 +92,24 @@ enum ExampleSmProcessRoles implements ProcessRole {
     ROLE2;
 }
 enum ExampleSmTransitions implements Task, StateMachineTransition {
-    TASK1(	"TASK1",
-    		ExampleSmStates.STATE1, 
+    TASK1(	ExampleSmStates.STATE1, 
     		ExampleSmStates.STATE2, 
     		Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1)
     ), 
-    TASK2(	"TASK2",
-    		ExampleSmStates.STATE2, 
+    TASK2(	ExampleSmStates.STATE2, 
     		ExampleSmStates.STATE3, 
     		Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2)
     );
     private final Iterable<ProcessRole> roles;
     private final StateMachineState from;
     private final StateMachineState to;
-    private final String name;
-    ExampleSmTransitions(String name, StateMachineState from, StateMachineState to, Iterable<ProcessRole> roles) {
-    	this.name = name;
+    ExampleSmTransitions(StateMachineState from, StateMachineState to, Iterable<ProcessRole> roles) {
     	this.from = from;
     	this.to = to;
         this.roles = roles;
     }
     @Override public String getTaskName() {
-        return name;
+        return name();
     }
     @Override public StateMachineState getFrom() {
     	return from;
