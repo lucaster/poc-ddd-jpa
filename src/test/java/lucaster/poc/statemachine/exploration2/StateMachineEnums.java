@@ -61,26 +61,23 @@ enum StateMachineProcessDefinition implements StateMachineDefinition, ProcessDef
     }
 }
 enum ExampleSmStates implements StateMachineState {
-	STATE1("STATE1", true, false),
-	STATE2("STATE2", false, false),
-	STATE3("STATE3", false, true);
-	private final String name;
+	STATE1(true, false),
+	STATE2(false, false),
+	STATE3(false, true);
 	private final boolean isInitial;
 	private final boolean isFinal;
-	ExampleSmStates(String name, boolean isInitial, boolean isFinal) {
-		this.name = name;
+	ExampleSmStates(boolean isInitial, boolean isFinal) {
 		this.isInitial = isInitial;
 		this.isFinal = isFinal;
 	}
 	@Override public boolean isInitial() {
 		return isInitial;
-
 	}
 	@Override public boolean isFinal() {
 		return isFinal;
 	}
 	@Override public String getName() {
-		return name;
+		return name();
 	}
 	// NaturalId, also good for Id
 	@Override public String getFullyQualifiedName() {
@@ -92,17 +89,19 @@ enum ExampleSmProcessRoles implements ProcessRole {
     ROLE2;
 }
 enum ExampleSmTransitions implements Task, StateMachineTransition {
-    TASK1(	ExampleSmStates.STATE1, 
-    		ExampleSmStates.STATE2, 
-    		Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1)
+    TASK1(
+    	ExampleSmStates.STATE1, 
+    	ExampleSmStates.STATE2, 
+    	Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1)
     ), 
-    TASK2(	ExampleSmStates.STATE2, 
-    		ExampleSmStates.STATE3, 
-    		Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2)
+    TASK2(
+    	ExampleSmStates.STATE2, 
+    	ExampleSmStates.STATE3, 
+    	Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2)
     );
+	private final StateMachineState from;
+	private final StateMachineState to;
     private final Iterable<ProcessRole> roles;
-    private final StateMachineState from;
-    private final StateMachineState to;
     ExampleSmTransitions(StateMachineState from, StateMachineState to, Iterable<ProcessRole> roles) {
     	this.from = from;
     	this.to = to;
