@@ -9,22 +9,23 @@ import java.util.Set;
  */
 enum StateMachineProcessDefinition implements StateMachineDefinition, ProcessDefinition {
 
-    EXAMPLE_SM_PROCESS("EXAMPLE_SM_PROCESS", Utils.<ExampleSmTransitions>toSet(
+    EXAMPLE_SM_PROCESS(Utils.toSet(
     	ExampleSmTransitions.TASK1, 
     	ExampleSmTransitions.TASK2
     ));
 
-	private final String processId;
     private final Iterable<ExampleSmTransitions> tasks;
 
-    // TODO: topology checks
-    StateMachineProcessDefinition(String processId, Iterable<ExampleSmTransitions> tasks) {
-    	this.processId = processId;
+    StateMachineProcessDefinition(Iterable<ExampleSmTransitions> tasks) {
+    	// TODO: check only one initial state
+    	// TODO: check final states must not have outgoing transitions
+    	// TODO: check only final states can have no outgoing transitions
+    	// TODO: check connected graph (only initial state can have no incoming transitions)
         this.tasks = tasks;
     }
     
 	@Override public String getProcessDefinitionId() {
-        return processId;
+        return name();
     }
 
     @Override public Iterable<Task> getOutgoingTransitions(StateMachineState state) {
