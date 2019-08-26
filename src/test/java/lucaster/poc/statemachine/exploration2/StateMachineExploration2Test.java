@@ -2,6 +2,7 @@ package lucaster.poc.statemachine.exploration2;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -18,12 +19,14 @@ public class StateMachineExploration2Test {
 	Usher usher;
 	ExecutorQuery executorQuery;
 	Executor executor;
+	Creator creator;
 
 	String username1;
 	String username2;
 	String task1Name;
 	String task2Name;
 	String appInstanceId;
+	String processDefinitionId;
 
 	@Before
 	public void setup() {
@@ -36,12 +39,36 @@ public class StateMachineExploration2Test {
 		usher = new TestUsherImpl(procIntegrQuery, procTopoQuery, roleQuery);
 		executorQuery = new ExecutorQueryImpl(integrationRepository, procTopoQuery);
 		executor = new ExecutorImpl(executorQuery, integrationRepository, usher);
+		creator = new CreatorImpl(procTopoQuery);
 
 		username1 = "EE53414";
 		username2 = "EE37987";
 		task1Name = ExampleSmTransitions.TASK1.getTaskName();
 		task2Name = ExampleSmTransitions.TASK2.getTaskName();
 		appInstanceId = "proposalId123";
+		processDefinitionId = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS.getProcessDefinitionId();
+	}
+
+	@Test
+	public void creation() {
+		// Act
+		String appInstanceId = "anotherAppInstance456";
+		ProcessInstance pi = creator.createProcessInstance(username1, processDefinitionId, appInstanceId);
+		// Assert
+		assertNotNull(pi);
+		assertEquals(processDefinitionId, pi.getProcessDefinition().getProcessDefinitionId());
+		assertTrue(pi instanceof StateMachineInstance);
+		assertTrue(((StateMachineInstance) pi).getActiveState().isInitial());
+	}
+
+	@Test
+	public void creationWithIntegrationInfo() {
+		// Act
+		String appInstanceId = "anotherAppInstance456";
+		creator.createProcessInstance(username1, processDefinitionId, appInstanceId);
+		// Assert
+		ProcessInstance integrationInfo = integrationRepository.findProcessInstanceByAppInstanceId(appInstanceId);
+		assertNotNull(integrationInfo);
 	}
 
 	@Test

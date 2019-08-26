@@ -54,16 +54,25 @@ enum StateMachineProcessDefinition implements StateMachineDefinition, ProcessDef
         }
         return null;
     }
+    
+    @Override public ProcessInstance createProcessInstance() {
+    	return new StateMachineInstance(this, ExampleSmStates.STATE1);
+    }
 }
 enum ExampleSmStates implements StateMachineState {
-	STATE1("STATE1", false),
-	STATE2("STATE2", false),
-	STATE3("STATE3", true);
+	STATE1("STATE1", true, false),
+	STATE2("STATE2", false, false),
+	STATE3("STATE3", false, true);
 	private final String name;
+	private final boolean isInitial;
 	private final boolean isFinal;
-	ExampleSmStates(String name, boolean isFinal) {
+	ExampleSmStates(String name, boolean isInitial, boolean isFinal) {
 		this.name = name;
+		this.isInitial = isInitial;
 		this.isFinal = isFinal;
+	}
+	@Override public boolean isInitial() {
+		return isInitial;
 	}
 	@Override public boolean isFinal() {
 		return isFinal;
