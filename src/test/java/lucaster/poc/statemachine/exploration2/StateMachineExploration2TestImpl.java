@@ -14,12 +14,9 @@ import java.util.Set;
  * For data-driven.
  */
 class TestDataDrivenStateMachineIntegrationRepository implements ProcessIntegrationRepository {
-	private final Set<StateMachineDataDrivenIntegration> repo;
-	{
-		repo = new HashSet<>();
-	    StateMachineProcessDefinition pd = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS;
-		StateMachineInstance pi = new StateMachineInstance(pd, ExampleSmStates.STATE1);
-	    String appInstanceId = "proposalId123";
+	private final Set<StateMachineDataDrivenIntegration> repo = new HashSet<>();
+	void add(String appInstanceId, StateMachineProcessDefinition pd, ExampleSmStates activeState) {
+		StateMachineInstance pi = new StateMachineInstance(pd, activeState);
 	    StateMachineDataDrivenIntegration appProcInst = new StateMachineDataDrivenIntegration(pi, appInstanceId);
 	    repo.add(appProcInst);
 	}
@@ -56,22 +53,18 @@ class TestDataDrivenStateMachineIntegrationRepository implements ProcessIntegrat
  * For not data-driven
  */
 class TestSimpleStateMachineIntegrationRepository implements ProcessIntegrationRepository {
+	private final Set<StateMachineSimpleIntegration> repo = new HashSet<>();
 	private final ProcessTopologyQuery topoQuery;
 	TestSimpleStateMachineIntegrationRepository(ProcessTopologyQuery topoQuery) {
 		this.topoQuery = topoQuery;
 	}
-	private final Set<StateMachineSimpleIntegration> repo;
-	{
-		repo = new HashSet<>();
-		String appInstanceId = "proposalId123";
-		StateMachineProcessDefinition pd = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS;
-		StateMachineInstance pi = new StateMachineInstance(pd);
-        repo.add(
+	void add(String appInstanceId, String processInstanceId, String processDefinitionId, String activeStateName) {
+		repo.add(
         	new StateMachineSimpleIntegration(
         			appInstanceId, 
-        			pi.getProcessInstanceId(), 
-        			pd.getProcessDefinitionId(), 
-        			ExampleSmStates.STATE1.getName()
+        			processInstanceId, 
+        			processDefinitionId, 
+        			activeStateName
         	)
         );
 	}

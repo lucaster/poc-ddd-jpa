@@ -31,12 +31,19 @@ public class StateMachineExploration2Test {
 	@Before
 	public void setup() {
 		processRoleRepository = new TestProcessRoleRepository();
-		((TestProcessRoleRepository)processRoleRepository).add("EE53414", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1));
-		((TestProcessRoleRepository)processRoleRepository).add("EE37987", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2));
+		((TestProcessRoleRepository) processRoleRepository).add("EE53414", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1));
+		((TestProcessRoleRepository) processRoleRepository).add("EE37987", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2));
 		
 		processDefinitionRepository = new EnumDrivenProcessDefinitionRepository();
 		procTopoQuery = new UsherProcessTopologyQueryImpl(processDefinitionRepository);
+		
 		integrationRepository = new TestSimpleStateMachineIntegrationRepository(procTopoQuery);
+		appInstanceId = "proposalId123";
+        String processInstanceId = new StateMachineInstance(StateMachineProcessDefinition.EXAMPLE_SM_PROCESS).getProcessInstanceId();
+        processDefinitionId = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS.getProcessDefinitionId();
+		String activeStateName = ExampleSmStates.STATE1.getName();
+		((TestSimpleStateMachineIntegrationRepository) integrationRepository).add(appInstanceId, processInstanceId, processDefinitionId, activeStateName);
+		
 		procIntegrQuery = new UsherProcessIntegrationQueryImpl(integrationRepository);
 		roleQuery = new UsherRoleQueryImpl(processRoleRepository);
 		usher = new TestUsherImpl(procIntegrQuery, procTopoQuery, roleQuery);
@@ -48,8 +55,6 @@ public class StateMachineExploration2Test {
 		username2 = "EE37987";
 		task1Name = ExampleSmTransitions.TASK1.getTaskName();
 		task2Name = ExampleSmTransitions.TASK2.getTaskName();
-		appInstanceId = "proposalId123";
-		processDefinitionId = StateMachineProcessDefinition.EXAMPLE_SM_PROCESS.getProcessDefinitionId();
 	}
 
 	@Test
