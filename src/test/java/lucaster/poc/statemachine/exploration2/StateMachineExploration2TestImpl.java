@@ -41,12 +41,25 @@ class TestDataDrivenStateMachineIntegrationRepository implements ProcessIntegrat
             }
         }
 	}
+	@Override
+	public void addIntegrationInfo(ProcessInstance pi, String appInstanceId) {
+		for (StateMachineDataDrivenIntegration api : repo) {
+            if (appInstanceId.equals(api.appInstanceId) || pi.equals(api.pi)) {
+            	throw new RuntimeException("App instance id already present");
+            }
+        }
+		repo.add(new StateMachineDataDrivenIntegration(pi, appInstanceId));
+	}
 }
 
 /**
  * For not data-driven
  */
 class TestSimpleStateMachineIntegrationRepository implements ProcessIntegrationRepository {
+	private final ProcessTopologyQuery topoQuery;
+	TestSimpleStateMachineIntegrationRepository(ProcessTopologyQuery topoQuery) {
+		this.topoQuery = topoQuery;
+	}
 	private final Set<StateMachineSimpleIntegration> repo;
 	{
 		repo = new HashSet<>();
@@ -84,13 +97,28 @@ class TestSimpleStateMachineIntegrationRepository implements ProcessIntegrationR
 	}
 	@Override
 	public void updateIntegrationInfo(ProcessInstance pi, String appInstanceId) {
-		// TODO Auto-generated method stub
 		for (StateMachineSimpleIntegration api : repo) {
 			if (appInstanceId.equals(api.appInstanceId)) {
 				StateMachineInstance smi = (StateMachineInstance) pi;
 				api.setActiveState(smi.getActiveState());
 			}
 		}
+	}
+	@Override
+	public void addIntegrationInfo(ProcessInstance pi, String appInstanceId) {
+		for (StateMachineSimpleIntegration api : repo) {
+			if (appInstanceId.equals(api.appInstanceId) || pi.getProcessInstanceId().equals(api.processInstanceId)) {
+				throw new RuntimeException("App instance id already present");
+			}
+		}
+		String processInstanceId = pi.getProcessInstanceId();
+		ProcessDefinition pd = topoQuery.findProcessDefinition(pi);
+		String processDefinitionId = pd.getProcessDefinitionId();
+		StateMachineInstance smi = (StateMachineInstance) pi;
+		StateMachineState activeState = smi.getActiveState();
+		String activeStateName = activeState.getName();
+		StateMachineSimpleIntegration api = new StateMachineSimpleIntegration(appInstanceId, processInstanceId, processDefinitionId, activeStateName);
+		repo.add(api);
 	}
 }
 

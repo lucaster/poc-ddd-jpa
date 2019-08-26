@@ -31,15 +31,15 @@ public class StateMachineExploration2Test {
 	@Before
 	public void setup() {
 		processRoleRepository = new TestProcessRoleRepository();
-		integrationRepository = new TestSimpleStateMachineIntegrationRepository();
 		processDefinitionRepository = new EnumDrivenProcessDefinitionRepository();
-		procIntegrQuery = new UsherProcessIntegrationQueryImpl(integrationRepository);
 		procTopoQuery = new UsherProcessTopologyQueryImpl(processDefinitionRepository);
+		integrationRepository = new TestSimpleStateMachineIntegrationRepository(procTopoQuery);
+		procIntegrQuery = new UsherProcessIntegrationQueryImpl(integrationRepository);
 		roleQuery = new UsherRoleQueryImpl(processRoleRepository);
 		usher = new TestUsherImpl(procIntegrQuery, procTopoQuery, roleQuery);
 		executorQuery = new ExecutorQueryImpl(integrationRepository, procTopoQuery);
 		executor = new ExecutorImpl(executorQuery, integrationRepository, usher);
-		creator = new CreatorImpl(procTopoQuery);
+		creator = new CreatorImpl(procTopoQuery, integrationRepository);
 
 		username1 = "EE53414";
 		username2 = "EE37987";
@@ -65,7 +65,7 @@ public class StateMachineExploration2Test {
 	public void creationWithIntegrationInfo() {
 		// Act
 		String appInstanceId = "anotherAppInstance456";
-		creator.createProcessInstance(username1, processDefinitionId, appInstanceId);
+		ProcessInstance pi = creator.createProcessInstance(username1, processDefinitionId, appInstanceId);
 		// Assert
 		ProcessInstance integrationInfo = integrationRepository.findProcessInstanceByAppInstanceId(appInstanceId);
 		assertNotNull(integrationInfo);
