@@ -31,6 +31,9 @@ public class StateMachineExploration2Test {
 	@Before
 	public void setup() {
 		processRoleRepository = new TestProcessRoleRepository();
+		((TestProcessRoleRepository)processRoleRepository).add("EE53414", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1));
+		((TestProcessRoleRepository)processRoleRepository).add("EE37987", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2));
+		
 		processDefinitionRepository = new EnumDrivenProcessDefinitionRepository();
 		procTopoQuery = new UsherProcessTopologyQueryImpl(processDefinitionRepository);
 		integrationRepository = new TestSimpleStateMachineIntegrationRepository(procTopoQuery);

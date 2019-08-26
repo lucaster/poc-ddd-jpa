@@ -123,17 +123,15 @@ class TestSimpleStateMachineIntegrationRepository implements ProcessIntegrationR
 }
 
 class TestProcessRoleRepository implements ProcessRoleRepository {
-	private final Map<String, Iterable<ProcessRole>> repo;
-	{
-		repo = new HashMap<>();
-		repo.put("EE53414", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1));
-		repo.put("EE37987", Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2));
-	}
+	private final Map<String, Iterable<ProcessRole>> repo = new HashMap<>();
 	@Override public Iterable<ProcessRole> findRoles(String username) {
 		Iterable<ProcessRole> roles = repo.get(username);
 		@SuppressWarnings("unchecked")
 		Iterable<ProcessRole> result = (Iterable<ProcessRole>) (roles != null ? roles : Collections.emptySet());
 		return result;
+	}
+	void add(String key, Set<ProcessRole> set) {
+		repo.put(key, set);
 	}	
 }
 
