@@ -18,9 +18,10 @@ enum StateMachineProcessDefinition implements StateMachineDefinition, ProcessDef
 
     StateMachineProcessDefinition(Iterable<ExampleSmTransitions> tasks) {
     	// TODO: check only one initial state
+    	// TODO: check at least one final state
     	// TODO: check final states must not have outgoing transitions
+    	// TODO: check only initial state can have no incoming transitions
     	// TODO: check only final states can have no outgoing transitions
-    	// TODO: check connected graph (only initial state can have no incoming transitions)
         this.tasks = tasks;
     }
     
