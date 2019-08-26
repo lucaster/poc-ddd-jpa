@@ -67,8 +67,9 @@ public class StateMachineExploration2Test {
 		String appInstanceId = "anotherAppInstance456";
 		ProcessInstance pi = creator.createProcessInstance(username1, processDefinitionId, appInstanceId);
 		// Assert
-		ProcessInstance integrationInfo = integrationRepository.findProcessInstanceByAppInstanceId(appInstanceId);
-		assertNotNull(integrationInfo);
+		ProcessInstance integratedPi = integrationRepository.findProcessInstanceByAppInstanceId(appInstanceId);
+		assertNotNull(integratedPi);
+		assertEquals(pi.getProcessInstanceId(), integratedPi.getProcessInstanceId());
 	}
 
 	@Test
