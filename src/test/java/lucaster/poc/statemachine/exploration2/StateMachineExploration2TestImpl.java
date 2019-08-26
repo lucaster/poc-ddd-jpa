@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * For data-driven.
  */
-class TestDataDrivenStateMachineIntegrationRepository implements ProcessIntegrationRepository {
+class InMemoryDataDrivenStateMachineIntegrationRepository implements ProcessIntegrationRepository {
 	private final Set<StateMachineDataDrivenIntegration> repo = new HashSet<>();
 	void add(String appInstanceId, StateMachineProcessDefinition pd, ExampleSmStates activeState) {
 		StateMachineInstance pi = new StateMachineInstance(pd, activeState);
@@ -52,10 +52,10 @@ class TestDataDrivenStateMachineIntegrationRepository implements ProcessIntegrat
 /**
  * For not data-driven
  */
-class TestSimpleStateMachineIntegrationRepository implements ProcessIntegrationRepository {
+class InMemorySimpleStateMachineIntegrationRepository implements ProcessIntegrationRepository {
 	private final Set<StateMachineSimpleIntegration> repo = new HashSet<>();
 	private final ProcessTopologyQuery topoQuery;
-	TestSimpleStateMachineIntegrationRepository(ProcessTopologyQuery topoQuery) {
+	InMemorySimpleStateMachineIntegrationRepository(ProcessTopologyQuery topoQuery) {
 		this.topoQuery = topoQuery;
 	}
 	void add(String appInstanceId, String processInstanceId, String processDefinitionId, String activeStateName) {
@@ -109,7 +109,7 @@ class TestSimpleStateMachineIntegrationRepository implements ProcessIntegrationR
 	}
 }
 
-class TestProcessRoleRepository implements ProcessRoleRepository {
+class InMemoryProcessRoleRepository implements ProcessRoleRepository {
 	private final Map<String, Iterable<ProcessRole>> repo = new HashMap<>();
 	@Override public Iterable<ProcessRole> findRoles(String username) {
 		Iterable<ProcessRole> roles = repo.get(username);
@@ -122,8 +122,8 @@ class TestProcessRoleRepository implements ProcessRoleRepository {
 	}	
 }
 
-class TestUsherImpl extends AbstractUsher {
-    public TestUsherImpl(
+class AlwaysActivePersonUsherImpl extends AbstractUsher {
+    public AlwaysActivePersonUsherImpl(
     	UsherProcessIntegrationQuery procIntegrQuery, 
     	ProcessTopologyQuery procTopoQuery,
     	UsherRoleQuery roleQuery

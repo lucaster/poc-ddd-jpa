@@ -40,19 +40,19 @@ public class StateMachineExploration2Test {
 		String processInstanceId = "processInstanceId123";
 		String activeStateName = ExampleSmStates.STATE1.getName();
 
-		processRoleRepository = new TestProcessRoleRepository();
-		((TestProcessRoleRepository) processRoleRepository).add(username1, Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1));
-		((TestProcessRoleRepository) processRoleRepository).add(username2, Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2));
+		processRoleRepository = new InMemoryProcessRoleRepository();
+		((InMemoryProcessRoleRepository) processRoleRepository).add(username1, Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE1));
+		((InMemoryProcessRoleRepository) processRoleRepository).add(username2, Utils.<ProcessRole>toSet(ExampleSmProcessRoles.ROLE2));
 		
 		processDefinitionRepository = new EnumDrivenProcessDefinitionRepository();
 		procTopoQuery = new UsherProcessTopologyQueryImpl(processDefinitionRepository);
 		
-		integrationRepository = new TestSimpleStateMachineIntegrationRepository(procTopoQuery);
-		((TestSimpleStateMachineIntegrationRepository) integrationRepository).add(appInstanceId, processInstanceId, processDefinitionId, activeStateName);
+		integrationRepository = new InMemorySimpleStateMachineIntegrationRepository(procTopoQuery);
+		((InMemorySimpleStateMachineIntegrationRepository) integrationRepository).add(appInstanceId, processInstanceId, processDefinitionId, activeStateName);
 		
 		procIntegrQuery = new UsherProcessIntegrationQueryImpl(integrationRepository);
 		roleQuery = new UsherRoleQueryImpl(processRoleRepository);
-		usher = new TestUsherImpl(procIntegrQuery, procTopoQuery, roleQuery);
+		usher = new AlwaysActivePersonUsherImpl(procIntegrQuery, procTopoQuery, roleQuery);
 		executorQuery = new ExecutorQueryImpl(integrationRepository, procTopoQuery);
 		executor = new ExecutorImpl(executorQuery, integrationRepository, usher);
 		creator = new CreatorImpl(procTopoQuery, integrationRepository);
@@ -101,13 +101,13 @@ public class StateMachineExploration2Test {
 		ProcessInstance pi = procIntegrQuery.findProcessInstanceByAppIntanceId(appInstanceId);
 		ProcessDefinition pd = procTopoQuery.findProcessDefinition(pi);
 		String processId = pd.getProcessDefinitionId();
-		boolean hasRoleForTask = ((TestUsherImpl) usher).hasRoleForTask(username1, processId, task1Name);
+		boolean hasRoleForTask = ((AlwaysActivePersonUsherImpl) usher).hasRoleForTask(username1, processId, task1Name);
 		assertTrue(hasRoleForTask);
 	}
 
 	@Test
 	public void isActiveTask() {
-		boolean isActiveTask = ((TestUsherImpl) usher).isActiveTask(task1Name, appInstanceId);
+		boolean isActiveTask = ((AlwaysActivePersonUsherImpl) usher).isActiveTask(task1Name, appInstanceId);
 		assertTrue(isActiveTask);
 	}
 
