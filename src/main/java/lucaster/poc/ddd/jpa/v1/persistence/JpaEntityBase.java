@@ -3,7 +3,6 @@ package lucaster.poc.ddd.jpa.v1.persistence;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.enterprise.context.Dependent;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.EntityListeners;
@@ -36,7 +35,7 @@ abstract class JpaEntityBase<T extends Serializable> implements Auditable {
     @Override public void setAudit(Audit audit) { this.audit = audit; }
 }
 
-@Dependent
+// @Dependent should not be needed
 class AuditListener  {
     /* 
       @Inject something (does CDI work here? Should work since JPA 2.1) 
