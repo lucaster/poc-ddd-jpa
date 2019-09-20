@@ -15,13 +15,7 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
             O response = work(request);
             return Try.success(response);
         }
-        catch (InvalidRequestException e) {
-            return Try.failure(e);
-        }
-        catch (UnauthorizedOperationException e) {
-            return Try.failure(e);
-        }
-        catch (IllegalStateException e) {
+        catch (InvalidRequestException | UnauthorizedOperationException | IllegalStateException e) {
             return Try.failure(e);
         }
         catch (RuntimeException e) {
