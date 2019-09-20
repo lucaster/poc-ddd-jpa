@@ -53,7 +53,6 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
 
     /**
      * Validate against external data that is not present in the request itself. E.G. user permissions, ACL, etc.
-     * @throws ValidationFailureException
      */
     protected abstract void validateComplex(I request) throws UnauthorizedOperationException, IllegalStateException;
 
@@ -66,49 +65,35 @@ abstract class UseCaseRequest {
     abstract ValidationResult validate();
 }
 abstract class UseCaseResponse {}
+interface UseCaseResponseConsumer<T extends UseCaseResponse> {
+    void consume(T response);
+}
 
-class ValidationFailureException extends Exception {
+abstract class ValidationFailureException extends RuntimeException {
     private static final long serialVersionUID = 1L;
     public final ValidationFailure vf;
     public ValidationFailureException(ValidationFailure vf) {
         this.vf = vf;
     }
 }
-abstract class SimpleValidationFailureException extends ValidationFailureException {
-    private static final long serialVersionUID = 1L;
-    public SimpleValidationFailureException(ValidationFailure vf) {
-        super(vf);
-    }
-}
-abstract class ComplexValidationFailureException extends ValidationFailureException {
-    private static final long serialVersionUID = 1L;
-    public ComplexValidationFailureException(ValidationFailure vf) {
-        super(vf);
-    }
-}
-class InvalidRequestException extends SimpleValidationFailureException {
+class InvalidRequestException extends ValidationFailureException {
     private static final long serialVersionUID = 1L;
     public InvalidRequestException(ValidationFailure vf) {
         super(vf);
     }
 }
-class UnauthorizedOperationException extends ComplexValidationFailureException {
+class UnauthorizedOperationException extends ValidationFailureException {
     private static final long serialVersionUID = 1L;
     public UnauthorizedOperationException(ValidationFailure vf) {
         super(vf);
     }
 }
-class IllegalStateException extends ComplexValidationFailureException {
+class IllegalStateException extends ValidationFailureException {
     private static final long serialVersionUID = 1L;
     public IllegalStateException(ValidationFailure vf) {
         super(vf);
     }
 }
-interface UseCaseResponseConsumer<T extends UseCaseResponse> {
-    void consume(T response);
-}
-
-
 
 // TODO static factory methods as in Try
 abstract class ValidationResult {}
