@@ -10,12 +10,19 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
      */
     final public Try<O> execute(I request) {
         try {
-            validate(request);
+            validateSimple(request);
+            validateComplex(request);
             O response = work(request);
             return Try.success(response);
         }
-        catch (ValidationFailureException e) {
-            return Try.failure(e); // Request invalid because of User error
+        catch (InvalidRequestException e) {
+            return Try.failure(e);
+        }
+        catch (UnauthorizedOperationException e) {
+            return Try.failure(e);
+        }
+        catch (IllegalStateException e) {
+            return Try.failure(e);
         }
         catch (RuntimeException e) {
             return Try.failure(e); // Server error
@@ -37,15 +44,10 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
         }
     }
 
-    private void validate(I request) throws ValidationFailureException {
-        validateSimple(request);
-        validateComplex(request);
-    }
-
-    private void validateSimple(I request) throws ValidationFailureException {
+    private void validateSimple(I request) throws InvalidRequestException {
         ValidationResult vr = request.validate();
         if (vr instanceof ValidationFailure) {
-            throw new ValidationFailureException((ValidationFailure) vr);
+            throw new InvalidRequestException((ValidationFailure) vr);
         }
     }
 
@@ -53,7 +55,7 @@ abstract class UseCase<I extends UseCaseRequest, O extends UseCaseResponse> {
      * Validate against external data that is not present in the request itself. E.G. user permissions, ACL, etc.
      * @throws ValidationFailureException
      */
-    protected abstract void validateComplex(I request) throws ValidationFailureException;
+    protected abstract void validateComplex(I request) throws UnauthorizedOperationException, IllegalStateException;
 
     /**
      * Does the actual heavy work
@@ -64,11 +66,42 @@ abstract class UseCaseRequest {
     abstract ValidationResult validate();
 }
 abstract class UseCaseResponse {}
-class ValidationFailureException extends RuntimeException {
+
+class ValidationFailureException extends Exception {
     private static final long serialVersionUID = 1L;
     public final ValidationFailure vf;
     public ValidationFailureException(ValidationFailure vf) {
         this.vf = vf;
+    }
+}
+abstract class SimpleValidationFailureException extends ValidationFailureException {
+    private static final long serialVersionUID = 1L;
+    public SimpleValidationFailureException(ValidationFailure vf) {
+        super(vf);
+    }
+}
+abstract class ComplexValidationFailureException extends ValidationFailureException {
+    private static final long serialVersionUID = 1L;
+    public ComplexValidationFailureException(ValidationFailure vf) {
+        super(vf);
+    }
+}
+class InvalidRequestException extends SimpleValidationFailureException {
+    private static final long serialVersionUID = 1L;
+    public InvalidRequestException(ValidationFailure vf) {
+        super(vf);
+    }
+}
+class UnauthorizedOperationException extends ComplexValidationFailureException {
+    private static final long serialVersionUID = 1L;
+    public UnauthorizedOperationException(ValidationFailure vf) {
+        super(vf);
+    }
+}
+class IllegalStateException extends ComplexValidationFailureException {
+    private static final long serialVersionUID = 1L;
+    public IllegalStateException(ValidationFailure vf) {
+        super(vf);
     }
 }
 interface UseCaseResponseConsumer<T extends UseCaseResponse> {
